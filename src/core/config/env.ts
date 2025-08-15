@@ -2,7 +2,6 @@
 interface EnvironmentConfig {
     API_KEY: string;
     API_BASE_URL: string;
-    MAP_API_KEY: string;
     ENVIRONMENT: 'development' | 'production' | 'test';
     DEBUG: boolean;
     VERSION: string;
@@ -18,7 +17,6 @@ const getEnvVar = (key: string, defaultValue = ''): string => {
 export const env: EnvironmentConfig = {
     API_KEY: getEnvVar('VITE_WEATHER_API_KEY', 'demo'),
     API_BASE_URL: getEnvVar('VITE_API_BASE_URL', 'https://api.weatherapi.com/v1'),
-    MAP_API_KEY: getEnvVar('VITE_MAP_API_KEY', ''),
     ENVIRONMENT: (getEnvVar('NODE_ENV') as 'development' | 'production' | 'test') || 'development',
     DEBUG: getEnvVar('VITE_DEBUG') === 'true' || import.meta.env.DEV,
     VERSION: getEnvVar('VITE_APP_VERSION', '1.0.0'),

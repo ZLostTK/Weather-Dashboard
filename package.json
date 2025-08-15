@@ -10,7 +10,8 @@
         "lint": "eslint . --ext .vue,.js,.ts,.tsx --fix",
         "format": "prettier --write .",
         "test": "vitest",
-        "test:coverage": "vitest --coverage"
+        "test:coverage": "vitest --coverage",
+        "test:run": "vitest --run"
     },
     "dependencies": {
         "vue": "^3.4.38",

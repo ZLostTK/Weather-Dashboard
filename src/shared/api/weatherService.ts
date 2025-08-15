@@ -1,8 +1,9 @@
 import axios from 'axios';
 import type { WeatherData, ForecastData } from '@/shared/types/weather';
+import { env } from '@/core/config/env';
 
-const API_KEY = 'YOUR_WEATHER_API_KEY'; // Users will need to add their API key
-const BASE_URL = 'https://api.weatherapi.com/v1';
+const API_KEY = env.API_KEY;
+const BASE_URL = env.API_BASE_URL;
 
 class WeatherService {
     public apiKey: string;

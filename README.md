@@ -65,11 +65,27 @@ npm run dev
 
 ### Configuración de API
 
-1. Registrarse en [WeatherAPI](https://www.weatherapi.com/) para obtener una API key gratuita
-2. En la aplicación, hacer clic en "Settings" y pegar tu API key
-3. ¡Disfruta de datos meteorológicos en tiempo real!
+#### Para Desarrollo Local
 
-> 💡 **Nota**: La aplicación funciona en modo demo sin API key, mostrando datos meteorológicos simulados.
+1. **Obtener API Key**: Registrarse en [WeatherAPI](https://www.weatherapi.com/) para obtener una API key gratuita
+2. **Configurar Variables de Entorno**: 
+   ```bash
+   # Copiar el archivo de ejemplo
+   cp .env.example .env
+   
+   # Editar .env y agregar tu API key
+   VITE_WEATHER_API_KEY=tu_api_key_aqui
+   ```
+3. **Ejecutar la aplicación**: `pnpm dev`
+
+#### Para Tests
+
+Los tests usan una API key de prueba automáticamente. No se requiere configuración adicional.
+
+> 💡 **Nota**: 
+> - La aplicación funciona en modo demo sin API key, mostrando datos meteorológicos simulados
+> - **Leaflet no requiere API key** - usa mapas gratuitos de OpenStreetMap por defecto
+> - Solo necesitas API key para datos meteorológicos reales de WeatherAPI
 
 ## 📋 Scripts Disponibles
 
