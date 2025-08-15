@@ -194,24 +194,7 @@ VITE_WEATHER_API_KEY=tu_api_key_aqui
 VITE_MAP_API_KEY=tu_map_api_key_aqui
 ```
 
-### Personalización de Temas
 
-Los temas se adaptan automáticamente a las condiciones meteorológicas:
-
-```css
-.weather-sunny {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-}
-.weather-cloudy {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-.weather-rainy {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-}
-.weather-snowy {
-    background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
-}
-```
 
 ## 🚀 Despliegue
 

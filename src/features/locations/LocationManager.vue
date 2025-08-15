@@ -215,8 +215,15 @@ const searchResults = ref<SearchResult[]>([]);
 const searchLoading = ref(false);
 const searchTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
 
-// Computed property to access savedLocations from the composable
-const savedLocationsList = computed(() => savedLocations.value);
+// Computed property to access savedLocations from the composable, with favorites first
+const savedLocationsList = computed(() => {
+    return [...savedLocations.value].sort((a, b) => {
+        // Favorites first, then by name
+        if (a.isFavorite && !b.isFavorite) return -1;
+        if (!a.isFavorite && b.isFavorite) return 1;
+        return a.name.localeCompare(b.name);
+    });
+});
 
 const handleSearch = async () => {
     // Clear previous timeout

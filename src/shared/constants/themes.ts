@@ -5,45 +5,6 @@ export const THEMES = {
     AUTO: 'AUTO',
 } as const;
 
-// Weather-based Theme Colors
-export const WEATHER_THEMES = {
-    SUNNY: {
-        primary: '#f093fb',
-        secondary: '#f5576c',
-        gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-        text: '#ffffff',
-        accent: '#fbbf24',
-    },
-    CLOUDY: {
-        primary: '#667eea',
-        secondary: '#764ba2',
-        gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        text: '#ffffff',
-        accent: '#a5b4fc',
-    },
-    RAINY: {
-        primary: '#4facfe',
-        secondary: '#00f2fe',
-        gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-        text: '#ffffff',
-        accent: '#38bdf8',
-    },
-    SNOWY: {
-        primary: '#e0eafc',
-        secondary: '#cfdef3',
-        gradient: 'linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%)',
-        text: '#1f2937',
-        accent: '#e5e7eb',
-    },
-    NIGHT: {
-        primary: '#2d1b69',
-        secondary: '#11118c',
-        gradient: 'linear-gradient(135deg, #2d1b69 0%, #11118c 100%)',
-        text: '#ffffff',
-        accent: '#6366f1',
-    },
-} as const;
-
 // CSS Custom Properties for Themes - Optimizado para accesibilidad
 export const THEME_CSS_VARIABLES = {
     [THEMES.LIGHT]: {
@@ -101,35 +62,6 @@ export const THEME_CSS_VARIABLES = {
         '--info-foreground': '224 71% 4%',
     },
 } as const;
-
-// Theme Utilities
-export const getWeatherTheme = (condition: string, isDay: boolean) => {
-    if (!isDay) return WEATHER_THEMES.NIGHT;
-
-    const lowerCondition = condition.toLowerCase();
-
-    if (lowerCondition.includes('sun') || lowerCondition.includes('clear')) {
-        return WEATHER_THEMES.SUNNY;
-    }
-
-    if (
-        lowerCondition.includes('rain') ||
-        lowerCondition.includes('drizzle') ||
-        lowerCondition.includes('shower')
-    ) {
-        return WEATHER_THEMES.RAINY;
-    }
-
-    if (
-        lowerCondition.includes('snow') ||
-        lowerCondition.includes('ice') ||
-        lowerCondition.includes('frost')
-    ) {
-        return WEATHER_THEMES.SNOWY;
-    }
-
-    return WEATHER_THEMES.CLOUDY;
-};
 
 export const applyTheme = (theme: keyof typeof THEME_CSS_VARIABLES) => {
     const root = document.documentElement;

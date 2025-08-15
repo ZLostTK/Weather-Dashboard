@@ -69,7 +69,7 @@
                             </div>
                         </div>
                         <div class="flex-1 min-w-0">
-                            <div class="text-white font-medium text-sm sm:text-base truncate">
+                            <div class="text-card-foreground font-medium text-sm sm:text-base truncate">
                                 {{ hour.condition.text }}
                             </div>
                             <div
@@ -95,7 +95,7 @@
                         class="flex items-center justify-center sm:justify-end space-x-2 sm:space-x-4 w-full sm:w-auto"
                     >
                         <div class="text-right">
-                            <div class="text-white font-bold text-base sm:text-lg">
+                            <div class="text-card-foreground font-bold text-base sm:text-lg">
                                 {{ Math.round(hour.temp_c) }}°
                             </div>
                             <div class="text-muted-foreground text-xs sm:text-sm">
