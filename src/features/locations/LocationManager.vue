@@ -1,17 +1,17 @@
 <template>
-    <div class="glass-card p-6 animate-fade-in">
-        <div class="flex items-center justify-between mb-6">
-            <h3 class="text-xl font-semibold text-white flex items-center">
-                <MapPin class="w-5 h-5 mr-2" />
+    <div class="glass-card p-4 sm:p-6 animate-fade-in">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-4">
+            <h3 class="text-lg sm:text-xl font-semibold text-white flex items-center">
+                <MapPin class="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                 Saved Locations
             </h3>
-            <div class="flex space-x-2">
-                <div class="relative">
+            <div class="flex w-full sm:w-auto">
+                <div class="relative flex-1 sm:flex-none">
                     <input
                         v-model="searchQuery"
                         type="text"
                         placeholder="Search locations..."
-                        class="pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-white/40"
+                        class="w-full pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-white/40 text-sm sm:text-base"
                         @input="handleSearch"
                     />
                     <Search
@@ -22,67 +22,67 @@
         </div>
 
         <!-- Search Results -->
-        <div v-if="searchResults.length > 0" class="mb-6">
-            <h4 class="text-white/80 text-sm mb-3">Search Results:</h4>
+        <div v-if="searchResults.length > 0" class="mb-4 sm:mb-6">
+            <h4 class="text-white/80 text-sm mb-2 sm:mb-3">Search Results:</h4>
             <div class="space-y-2">
                 <div
                     v-for="result in searchResults"
                     :key="`${result.lat}-${result.lon}`"
-                    class="flex items-center justify-between p-3 bg-white/5 hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
+                    class="flex items-center justify-between p-2 sm:p-3 bg-white/5 hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
                     @click="addLocation(result)"
                 >
-                    <div>
-                        <div class="text-white font-medium">{{ result.name }}</div>
-                        <div class="text-white/60 text-sm">
+                    <div class="min-w-0 flex-1">
+                        <div class="text-white font-medium text-sm sm:text-base truncate">{{ result.name }}</div>
+                        <div class="text-white/60 text-xs sm:text-sm truncate">
                             {{ result.region }}, {{ result.country }}
                         </div>
                     </div>
-                    <Plus class="w-4 h-4 text-white/60" />
+                    <Plus class="w-4 h-4 text-white/60 flex-shrink-0 ml-2" />
                 </div>
             </div>
         </div>
 
         <!-- Saved Locations -->
-        <div class="space-y-3">
+        <div class="space-y-2 sm:space-y-3">
             <div
                 v-for="location in savedLocations"
                 :key="location.id"
-                class="group relative p-4 bg-white/5 hover:bg-white/10 rounded-lg transition-all duration-200 hover:scale-[1.02]"
+                class="group relative p-3 sm:p-4 bg-white/5 hover:bg-white/10 rounded-lg transition-all duration-200 hover:scale-[1.02]"
             >
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-4 flex-1">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div class="flex items-center space-x-3 sm:space-x-4 flex-1 min-w-0">
                         <!-- Location icon with weather indicator -->
-                        <div class="relative">
+                        <div class="relative flex-shrink-0">
                             <div
-                                class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center"
+                                class="w-8 h-8 sm:w-10 sm:h-10 bg-white/10 rounded-full flex items-center justify-center"
                             >
-                                <MapPin class="w-5 h-5 text-white/70" />
+                                <MapPin class="w-4 h-4 sm:w-5 sm:h-5 text-white/70" />
                             </div>
                             <div
                                 v-if="location.isDefault"
-                                class="absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 rounded-full flex items-center justify-center"
+                                class="absolute -top-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-yellow-400 rounded-full flex items-center justify-center"
                             >
-                                <Star class="w-2 h-2 text-white fill-current" />
+                                <Star class="w-1.5 h-1.5 sm:w-2 sm:h-2 text-white fill-current" />
                             </div>
                         </div>
 
                         <div class="flex-1 min-w-0">
-                            <div class="flex items-center space-x-2">
-                                <div class="text-white font-medium truncate">
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                                <div class="text-white font-medium truncate text-sm sm:text-base">
                                     {{ location.name }}
                                 </div>
                                 <div
                                     v-if="location.isDefault"
-                                    class="px-2 py-1 bg-yellow-400/20 text-yellow-400 text-xs rounded-full"
+                                    class="px-2 py-1 bg-yellow-400/20 text-yellow-400 text-xs rounded-full w-fit"
                                 >
                                     Default
                                 </div>
                             </div>
-                            <div class="text-white/60 text-sm truncate">
+                            <div class="text-white/60 text-xs sm:text-sm truncate">
                                 {{ location.region }}, {{ location.country }}
                             </div>
-                            <div class="text-white/40 text-xs mt-1 flex items-center space-x-3">
-                                <span
+                            <div class="text-white/40 text-xs mt-1 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
+                                <span class="truncate"
                                     >{{ location.lat.toFixed(2) }}°,
                                     {{ location.lon.toFixed(2) }}°</span
                                 >
@@ -97,10 +97,10 @@
                     <!-- Weather preview for this location -->
                     <div
                         v-if="getLocationWeather(location)"
-                        class="hidden sm:flex items-center space-x-3 mr-4"
+                        class="hidden sm:flex items-center space-x-2 sm:space-x-3 mr-2 sm:mr-4"
                     >
                         <div class="text-center">
-                            <div class="text-white font-bold text-lg">
+                            <div class="text-white font-bold text-base sm:text-lg">
                                 {{ getLocationWeather(location)?.temp }}°
                             </div>
                             <div class="text-white/60 text-xs">
@@ -110,50 +110,50 @@
                         <img
                             :src="getLocationWeather(location)?.icon"
                             :alt="getLocationWeather(location)?.condition"
-                            class="w-8 h-8"
+                            class="w-6 h-6 sm:w-8 sm:h-8"
                         />
                     </div>
 
                     <!-- Action buttons -->
                     <div
-                        class="flex items-center space-x-1 opacity-70 group-hover:opacity-100 transition-opacity"
+                        class="flex items-center justify-center sm:justify-end space-x-1 opacity-70 group-hover:opacity-100 transition-opacity w-full sm:w-auto"
                     >
                         <button
                             @click="setAsDefault(location.id)"
                             :class="[
-                                'p-2 rounded-lg transition-all duration-200',
+                                'p-1.5 sm:p-2 rounded-lg transition-all duration-200',
                                 location.isDefault
                                     ? 'bg-yellow-400/20 text-yellow-400 scale-110'
                                     : 'hover:bg-white/10 text-white/60 hover:text-yellow-400 hover:scale-110',
                             ]"
                             :title="location.isDefault ? 'Default location' : 'Set as default'"
                         >
-                            <Star class="w-4 h-4" :class="{ 'fill-current': location.isDefault }" />
+                            <Star class="w-3.5 h-3.5 sm:w-4 sm:h-4" :class="{ 'fill-current': location.isDefault }" />
                         </button>
 
                         <button
                             @click="selectLocation(location)"
-                            class="p-2 hover:bg-blue-500/20 rounded-lg text-blue-400 transition-all duration-200 hover:scale-110"
+                            class="p-1.5 sm:p-2 hover:bg-blue-500/20 rounded-lg text-blue-400 transition-all duration-200 hover:scale-110"
                             title="View weather for this location"
                         >
-                            <Eye class="w-4 h-4" />
+                            <Eye class="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         </button>
 
                         <button
                             @click="showLocationDetails(location)"
-                            class="p-2 hover:bg-gray-500/20 rounded-lg text-gray-400 transition-all duration-200 hover:scale-110"
+                            class="p-1.5 sm:p-2 hover:bg-gray-500/20 rounded-lg text-gray-400 transition-all duration-200 hover:scale-110"
                             title="View details"
                         >
-                            <Info class="w-4 h-4" />
+                            <Info class="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         </button>
 
                         <button
                             @click="removeLocation(location.id)"
-                            class="p-2 hover:bg-red-500/20 rounded-lg text-red-400 transition-all duration-200 hover:scale-110"
+                            class="p-1.5 sm:p-2 hover:bg-red-500/20 rounded-lg text-red-400 transition-all duration-200 hover:scale-110"
                             title="Remove location"
                             :disabled="location.isDefault && savedLocations.length > 1"
                         >
-                            <Trash2 class="w-4 h-4" />
+                            <Trash2 class="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         </button>
                     </div>
                 </div>
@@ -161,27 +161,27 @@
                 <!-- Expandable details -->
                 <div
                     v-if="expandedLocation === location.id"
-                    class="mt-4 pt-4 border-t border-white/10 animate-fade-in"
+                    class="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-white/10 animate-fade-in"
                 >
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 text-xs sm:text-sm">
                         <div class="text-center">
-                            <Globe class="w-4 h-4 text-blue-400 mx-auto mb-1" />
-                            <div class="text-white/80">{{ location.country }}</div>
+                            <Globe class="w-3 h-3 sm:w-4 sm:h-4 text-blue-400 mx-auto mb-1" />
+                            <div class="text-white/80 text-xs sm:text-sm">{{ location.country }}</div>
                             <div class="text-white/60 text-xs">Country</div>
                         </div>
                         <div class="text-center">
-                            <MapPin class="w-4 h-4 text-green-400 mx-auto mb-1" />
-                            <div class="text-white/80">{{ location.region }}</div>
+                            <MapPin class="w-3 h-3 sm:w-4 sm:h-4 text-green-400 mx-auto mb-1" />
+                            <div class="text-white/80 text-xs sm:text-sm">{{ location.region }}</div>
                             <div class="text-white/60 text-xs">Region</div>
                         </div>
                         <div class="text-center">
-                            <Navigation class="w-4 h-4 text-purple-400 mx-auto mb-1" />
-                            <div class="text-white/80">{{ location.lat.toFixed(4) }}°</div>
+                            <Navigation class="w-3 h-3 sm:w-4 sm:h-4 text-purple-400 mx-auto mb-1" />
+                            <div class="text-white/80 text-xs sm:text-sm">{{ location.lat.toFixed(4) }}°</div>
                             <div class="text-white/60 text-xs">Latitude</div>
                         </div>
                         <div class="text-center">
-                            <Navigation class="w-4 h-4 text-orange-400 mx-auto mb-1" />
-                            <div class="text-white/80">{{ location.lon.toFixed(4) }}°</div>
+                            <Navigation class="w-3 h-3 sm:w-4 sm:h-4 text-orange-400 mx-auto mb-1" />
+                            <div class="text-white/80 text-xs sm:text-sm">{{ location.lon.toFixed(4) }}°</div>
                             <div class="text-white/60 text-xs">Longitude</div>
                         </div>
                     </div>
@@ -189,10 +189,10 @@
             </div>
         </div>
 
-        <div v-if="savedLocations.length === 0" class="text-center py-8">
-            <MapPin class="w-12 h-12 text-white/40 mx-auto mb-3" />
-            <p class="text-white/60 mb-2">No saved locations</p>
-            <p class="text-white/40 text-sm">
+        <div v-if="savedLocations.length === 0" class="text-center py-6 sm:py-8">
+            <MapPin class="w-10 h-10 sm:w-12 sm:h-12 text-white/40 mx-auto mb-2 sm:mb-3" />
+            <p class="text-white/60 mb-1 sm:mb-2 text-sm sm:text-base">No saved locations</p>
+            <p class="text-white/40 text-xs sm:text-sm">
                 Search for locations above to add them to your favorites
             </p>
         </div>

@@ -4,144 +4,145 @@
         <div
             class="fixed inset-0 bg-gradient-to-br from-primary/5 via-accent/5 to-secondary/5"
         ></div>
-
-        <!-- API Key Setup -->
+    
+    <!-- API Key Setup -->
         <ApiKeySetup :api-key="apiKey" @set-api-key="setApiKey" />
 
-        <!-- Main Content -->
-        <div v-if="apiKey" class="relative z-10">
-            <!-- Header -->
-            <header class="p-6 border-b border-border bg-card/50 backdrop-blur-sm">
-                <div class="max-w-7xl mx-auto flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <div
-                            class="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center backdrop-blur-sm"
-                        >
-                            <Cloud class="w-6 h-6 text-primary" />
-                        </div>
-                        <div>
-                            <h1 class="text-2xl font-bold text-foreground">Weather Dashboard</h1>
-                            <p class="text-muted-foreground text-sm">
+    <!-- Main Content -->
+    <div v-if="apiKey" class="relative z-10">
+      <!-- Header -->
+                  <header class="p-4 sm:p-6 border-b border-border bg-card/50 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="flex items-center space-x-3">
+            <div
+                class="w-8 h-8 sm:w-10 sm:h-10 bg-primary/20 rounded-lg flex items-center justify-center backdrop-blur-sm flex-shrink-0"
+            >
+                            <Cloud class="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+            </div>
+            <div class="min-w-0">
+                            <h1 class="text-xl sm:text-2xl font-bold text-foreground truncate">Weather Dashboard</h1>
+                            <p class="text-muted-foreground text-xs sm:text-sm truncate">
                                 Real-time weather insights and forecasts
                             </p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center space-x-4">
+            </div>
+          </div>
+          
+          <div class="flex items-center justify-center sm:justify-end space-x-2 sm:space-x-4 w-full sm:w-auto">
                         <!-- Search Location Button -->
                         <button
                             @click="showLocationSearch = true"
-                            class="btn-ghost flex items-center space-x-2 px-4 py-2 border border-border hover:bg-accent"
+                            class="btn-ghost flex items-center space-x-2 px-2 sm:px-4 py-2 border border-border hover:bg-accent flex-1 sm:flex-none"
                         >
                             <Search class="w-4 h-4" />
                             <span class="hidden sm:inline">{{ currentLocation || 'Buscar ubicación' }}</span>
+                            <span class="sm:hidden">Buscar</span>
                         </button>
 
-                        <!-- Refresh button -->
-                        <button
-                            @click="refreshWeather"
-                            :disabled="loading"
-                            class="btn-ghost p-2 disabled:opacity-50"
-                        >
-                            <RefreshCw :class="['w-5 h-5', { 'animate-spin': loading }]" />
-                        </button>
+            <!-- Refresh button -->
+            <button
+              @click="refreshWeather"
+              :disabled="loading"
+                            class="btn-ghost p-2 disabled:opacity-50 flex-shrink-0"
+            >
+              <RefreshCw :class="['w-4 h-4 sm:w-5 sm:h-5', { 'animate-spin': loading }]" />
+            </button>
 
-                        <!-- Settings -->
-                        <button @click="showSettings = true" class="btn-ghost p-2">
-                            <Settings class="w-5 h-5" />
-                        </button>
-                    </div>
-                </div>
-            </header>
+            <!-- Settings -->
+                        <button @click="showSettings = true" class="btn-ghost p-2 flex-shrink-0">
+              <Settings class="w-4 h-4 sm:w-5 sm:h-5" />
+            </button>
+          </div>
+        </div>
+      </header>
 
             <!-- Main Dashboard -->
-            <main class="max-w-7xl mx-auto p-6">
-                <div
-                    v-if="error"
-                    class="mb-6 p-4 bg-destructive/20 border border-destructive/40 rounded-lg text-destructive-foreground"
-                >
-                    <div class="flex items-center space-x-2">
-                        <AlertCircle class="w-5 h-5" />
-                        <span>{{ error }}</span>
-                    </div>
-                </div>
+      <main class="max-w-7xl mx-auto p-3 sm:p-4 md:p-6">
+        <div
+            v-if="error"
+            class="mb-4 sm:mb-6 p-3 sm:p-4 bg-destructive/20 border border-destructive/40 rounded-lg text-destructive-foreground"
+        >
+          <div class="flex items-center space-x-2">
+            <AlertCircle class="w-4 h-4 sm:w-5 sm:h-5" />
+            <span class="text-sm sm:text-base">{{ error }}</span>
+          </div>
+        </div>
 
-                <!-- Weather Overview -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                    <div class="lg:col-span-1">
-                        <WeatherCard :weather="currentWeather" />
-                    </div>
-
-                    <div class="lg:col-span-2">
+        <!-- Weather Overview -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8">
+          <div class="lg:col-span-1">
+            <WeatherCard :weather="currentWeather" />
+          </div>
+          
+          <div class="lg:col-span-2">
                         <ForecastChart :forecast="forecast" :loading="loading" />
-                    </div>
-                </div>
+          </div>
+        </div>
 
-                <!-- Weather Analytics Charts -->
-                <div class="mb-8">
-                    <WeatherCharts :forecast="forecast" />
-                </div>
+        <!-- Weather Analytics Charts -->
+        <div class="mb-6 sm:mb-8">
+          <WeatherCharts :forecast="forecast" />
+        </div>
 
-                <!-- Weather Map and Daily Forecast -->
-                <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
-                    <WeatherMap />
-                    <DailyForecast :forecast="forecast" />
-                </div>
+        <!-- Weather Map and Daily Forecast -->
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8">
+          <WeatherMap />
+          <DailyForecast :forecast="forecast" />
+        </div>
 
-                <!-- Alerts and Location Management -->
-                <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
-                    <WeatherAlerts
-                        :alerts="alerts"
-                        @add-alert="addAlert"
-                        @remove-alert="removeAlert"
-                        @toggle-alert="toggleAlert"
-                    />
-
-                    <LocationManager
-                        :saved-locations="savedLocations"
-                        @add-location="addSavedLocation"
-                        @remove-location="removeSavedLocation"
-                        @set-default="setDefaultLocation"
-                        @select-location="selectLocation"
-                    />
-                </div>
-            </main>
+        <!-- Alerts and Location Management -->
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
+          <WeatherAlerts
+            :alerts="alerts"
+            @add-alert="addAlert"
+            @remove-alert="removeAlert"
+            @toggle-alert="toggleAlert"
+          />
+          
+          <LocationManager
+            :saved-locations="savedLocations"
+            @add-location="addSavedLocation"
+            @remove-location="removeSavedLocation"
+            @set-default="setDefaultLocation"
+            @select-location="selectLocation"
+          />
+        </div>
+      </main>
 
             <!-- Settings Modal -->
             <Teleport to="body">
-                <div
-                    v-if="showSettings"
-                    class="settings-modal-overlay fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-[9998] p-4"
-                    @click.self="showSettings = false"
+      <div
+        v-if="showSettings"
+                    class="settings-modal-overlay fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-[9998] p-3 sm:p-4"
+        @click.self="showSettings = false"
                     style="z-index: 9998"
                 >
                     <div
-                        class="bg-card backdrop-blur-md rounded-xl p-6 w-full max-w-md mx-4 border border-border shadow-lg"
+                        class="bg-card backdrop-blur-md rounded-xl p-4 sm:p-6 w-full max-w-md mx-3 sm:mx-4 border border-border shadow-lg"
                     >
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-lg font-semibold text-card-foreground">Settings</h3>
                             <button @click="showSettings = false" class="btn-ghost p-1">
-                                <X class="w-5 h-5" />
+                                <X class="w-4 h-4 sm:w-5 sm:h-5" />
                             </button>
                         </div>
 
-                        <div class="space-y-4">
-                            <div>
+          <div class="space-y-4">
+            <div>
                                 <label class="block text-card-foreground text-sm mb-2"
                                     >WeatherAPI Key</label
                                 >
-                                <div class="flex space-x-2">
-                                    <input
-                                        v-model="newApiKey"
-                                        type="text"
+              <div class="flex space-x-2">
+                <input
+                  v-model="newApiKey"
+                  type="text"
                                         class="form-input flex-1"
-                                        placeholder="Enter new API key"
-                                    />
+                  placeholder="Enter new API key"
+                />
                                     <button @click="updateApiKey" class="btn-primary">
-                                        Update
-                                    </button>
-                                </div>
-                            </div>
+                  Update
+                </button>
+              </div>
+            </div>
 
                             <!-- Theme Selector -->
                             <div>
@@ -161,11 +162,11 @@
 
                             <div class="pt-4 border-t border-border">
                                 <button @click="resetToDemo" class="btn-secondary w-full">
-                                    Switch to Demo Mode
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                Switch to Demo Mode
+              </button>
+            </div>
+          </div>
+        </div>
                 </div>
             </Teleport>
 
@@ -173,53 +174,53 @@
             <Teleport to="body">
                 <div
                     v-if="showLocationSearch"
-                    class="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-[9997] p-4"
+                    class="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-[9997] p-3 sm:p-4"
                     @click.self="showLocationSearch = false"
                 >
-                    <div class="bg-card backdrop-blur-md rounded-xl p-6 w-full max-w-lg mx-4 border border-border shadow-lg">
-                        <div class="flex items-center justify-between mb-6">
-                            <h3 class="text-xl font-semibold text-card-foreground">Buscar Ubicación</h3>
+                    <div class="bg-card backdrop-blur-md rounded-xl p-4 sm:p-6 w-full max-w-lg mx-3 sm:mx-4 border border-border shadow-lg max-h-[90vh] overflow-y-auto">
+                        <div class="flex items-center justify-between mb-4 sm:mb-6">
+                            <h3 class="text-lg sm:text-xl font-semibold text-card-foreground">Buscar Ubicación</h3>
                             <button
                                 @click="showLocationSearch = false"
                                 class="btn-ghost p-1"
                             >
-                                <X class="w-5 h-5" />
+                                <X class="w-4 h-4 sm:w-5 sm:h-5" />
                             </button>
                         </div>
 
-                        <div class="space-y-4">
+                        <div class="space-y-3 sm:space-y-4">
                             <!-- Search Input -->
                             <div class="relative">
-                                <Search class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                                <Search class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground pointer-events-none" />
                                 <input
                                     v-model="searchQuery"
                                     @input="searchLocations"
                                     @keyup.enter="selectFirstResult"
                                     type="text"
-                                    class="form-input pl-10 w-full"
+                                    class="w-full bg-input border border-border rounded-lg pl-10 sm:pl-12 pr-3 py-2 text-sm sm:text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-all duration-200"
                                     placeholder="Buscar ciudad, país o región..."
                                     :disabled="searchLoading"
                                 />
                             </div>
 
                             <!-- Search Results -->
-                            <div v-if="searchResults.length > 0" class="max-h-64 overflow-y-auto space-y-2">
+                            <div v-if="searchResults.length > 0" class="max-h-48 sm:max-h-64 overflow-y-auto space-y-2">
                                 <div
                                     v-for="result in searchResults"
                                     :key="`${result.name}-${result.region}-${result.country}`"
                                     @click="selectSearchResult(result)"
-                                    class="p-3 rounded-lg border border-border hover:bg-accent cursor-pointer transition-colors"
+                                    class="p-2 sm:p-3 rounded-lg border border-border hover:bg-accent cursor-pointer transition-colors"
                                 >
                                     <div class="flex items-center justify-between">
-                                        <div>
-                                            <div class="font-medium text-card-foreground">{{ result.name }}</div>
-                                            <div class="text-sm text-muted-foreground">
+                                        <div class="min-w-0 flex-1">
+                                            <div class="font-medium text-card-foreground text-sm sm:text-base truncate">{{ result.name }}</div>
+                                            <div class="text-xs sm:text-sm text-muted-foreground truncate">
                                                 {{ result.region }}, {{ result.country }}
                                             </div>
                                         </div>
                                         <button
                                             @click.stop="addToSavedLocations(result)"
-                                            class="btn-ghost p-2 text-muted-foreground hover:text-primary"
+                                            class="btn-ghost p-1 sm:p-2 text-muted-foreground hover:text-primary flex-shrink-0 ml-2"
                                             title="Agregar a favoritos"
                                         >
                                             <Plus class="w-4 h-4" />
@@ -242,25 +243,25 @@
                             </div>
 
                             <!-- Saved Locations -->
-                            <div v-if="savedLocations.length > 0" class="border-t border-border pt-4">
-                                <h4 class="font-medium text-card-foreground mb-3">Ubicaciones Guardadas</h4>
+                            <div v-if="savedLocations.length > 0" class="border-t border-border pt-3 sm:pt-4">
+                                <h4 class="font-medium text-card-foreground mb-2 sm:mb-3 text-sm sm:text-base">Ubicaciones Guardadas</h4>
                                 <div class="space-y-2">
                                     <div
                                         v-for="location in savedLocations"
                                         :key="location.id"
                                         @click="selectSavedLocation(location)"
-                                        class="p-3 rounded-lg border border-border hover:bg-accent cursor-pointer transition-colors"
+                                        class="p-2 sm:p-3 rounded-lg border border-border hover:bg-accent cursor-pointer transition-colors"
                                     >
                                         <div class="flex items-center justify-between">
-                                            <div>
-                                                <div class="font-medium text-card-foreground">{{ location.name }}</div>
-                                                <div class="text-sm text-muted-foreground">
+                                            <div class="min-w-0 flex-1">
+                                                <div class="font-medium text-card-foreground text-sm sm:text-base truncate">{{ location.name }}</div>
+                                                <div class="text-xs sm:text-sm text-muted-foreground truncate">
                                                     {{ location.region }}, {{ location.country }}
                                                 </div>
                                             </div>
                                             <button
                                                 @click.stop="removeSavedLocation(location.id)"
-                                                class="btn-ghost p-2 text-destructive hover:bg-destructive/10"
+                                                class="btn-ghost p-1 sm:p-2 text-destructive hover:bg-destructive/10 flex-shrink-0 ml-2"
                                                 title="Eliminar de favoritos"
                                             >
                                                 <Trash2 class="w-4 h-4" />
@@ -273,8 +274,8 @@
                     </div>
                 </div>
             </Teleport>
-        </div>
     </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -292,23 +293,23 @@ import { useWeather } from '@/shared/composables/useWeather';
 import { useAppStore } from '@/shared/stores/useAppStore';
 
 const {
-    currentWeather,
-    forecast,
-    loading,
-    error,
-    alerts,
-    savedLocations,
-    currentLocation,
-    apiKey,
-    setApiKey,
-    fetchCurrentWeather,
-    fetchForecast,
-    addAlert,
-    removeAlert,
-    toggleAlert,
-    addSavedLocation,
-    removeSavedLocation,
-    setDefaultLocation,
+  currentWeather,
+  forecast,
+  loading,
+  error,
+  alerts,
+  savedLocations,
+  currentLocation,
+  apiKey,
+  setApiKey,
+  fetchCurrentWeather,
+  fetchForecast,
+  addAlert,
+  removeAlert,
+  toggleAlert,
+  addSavedLocation,
+  removeSavedLocation,
+  setDefaultLocation,
 } = useWeather();
 
 const showSettings = ref(false);
@@ -392,7 +393,7 @@ const addToSavedLocations = (result: any) => {
 };
 
 const handleLocationChange = () => {
-    refreshWeather();
+  refreshWeather();
 };
 
 const refreshWeather = async () => {
@@ -400,23 +401,23 @@ const refreshWeather = async () => {
 };
 
 const selectLocation = (location: any) => {
-    currentLocation.value = `${location.name}, ${location.region}`;
-    refreshWeather();
+  currentLocation.value = `${location.name}, ${location.region}`;
+  refreshWeather();
 };
 
 const updateApiKey = () => {
-    if (newApiKey.value.trim()) {
-        setApiKey(newApiKey.value.trim());
-        newApiKey.value = '';
-        showSettings.value = false;
-        refreshWeather();
-    }
+  if (newApiKey.value.trim()) {
+    setApiKey(newApiKey.value.trim());
+    newApiKey.value = '';
+    showSettings.value = false;
+    refreshWeather();
+  }
 };
 
 const resetToDemo = () => {
-    setApiKey('demo');
-    showSettings.value = false;
-    refreshWeather();
+  setApiKey('demo');
+  showSettings.value = false;
+  refreshWeather();
 };
 
 const handleThemeChange = () => {
@@ -428,9 +429,9 @@ onMounted(async () => {
     // Initialize app store and theme
     appStore.initialize();
 
-    if (apiKey.value) {
-        await refreshWeather();
-    }
+  if (apiKey.value) {
+    await refreshWeather();
+  }
 });
 
 // Cleanup on unmount

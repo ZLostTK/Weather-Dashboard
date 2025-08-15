@@ -1,66 +1,66 @@
 <template>
-    <div class="glass-card p-6 animate-fade-in">
-        <div class="flex items-center justify-between mb-6">
-            <h3 class="text-xl font-semibold text-white">Weather Analytics</h3>
-            <div class="flex space-x-2">
+    <div class="glass-card p-4 sm:p-6 animate-fade-in">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-3">
+            <h3 class="text-lg sm:text-xl font-semibold text-white">Weather Analytics</h3>
+            <div class="flex flex-wrap gap-1 sm:gap-2">
                 <button
                     v-for="chart in chartTypes"
                     :key="chart.key"
                     @click="activeChart = chart.key"
                     :class="[
-                        'px-3 py-1 rounded-lg text-sm transition-all duration-200 flex items-center space-x-1',
+                        'px-2 sm:px-3 py-1 rounded-lg text-xs sm:text-sm transition-all duration-200 flex items-center space-x-1',
                         activeChart === chart.key
                             ? 'bg-white/20 text-white shadow-lg'
                             : 'text-white/70 hover:text-white hover:bg-white/10',
                     ]"
                 >
-                    <component :is="chart.icon" class="w-4 h-4" />
+                    <component :is="chart.icon" class="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     <span>{{ chart.label }}</span>
                 </button>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
             <!-- Main Chart -->
-            <div class="lg:col-span-2 bg-white/5 rounded-lg p-4">
-                <div class="h-64 w-full">
+            <div class="lg:col-span-2 bg-white/5 rounded-lg p-3 sm:p-4">
+                <div class="h-48 sm:h-56 md:h-64 w-full">
                     <canvas ref="mainChartRef"></canvas>
                 </div>
             </div>
 
             <!-- Secondary Charts -->
-            <div class="bg-white/5 rounded-lg p-4">
-                <h4 class="text-sm font-medium text-white/80 mb-3">Humidity & Pressure</h4>
-                <div class="h-32 w-full">
+            <div class="bg-white/5 rounded-lg p-3 sm:p-4">
+                <h4 class="text-xs sm:text-sm font-medium text-white/80 mb-2 sm:mb-3">Humidity & Pressure</h4>
+                <div class="h-24 sm:h-28 md:h-32 w-full">
                     <canvas ref="humidityChartRef"></canvas>
                 </div>
             </div>
 
-            <div class="bg-white/5 rounded-lg p-4">
-                <h4 class="text-sm font-medium text-white/80 mb-3">Wind Analysis</h4>
-                <div class="h-32 w-full">
+            <div class="bg-white/5 rounded-lg p-3 sm:p-4">
+                <h4 class="text-xs sm:text-sm font-medium text-white/80 mb-2 sm:mb-3">Wind Analysis</h4>
+                <div class="h-24 sm:h-28 md:h-32 w-full">
                     <canvas ref="windChartRef"></canvas>
                 </div>
             </div>
         </div>
 
         <!-- Chart Statistics -->
-        <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="mt-4 sm:mt-6 grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
             <div class="text-center">
-                <div class="text-2xl font-bold text-white">{{ stats.avgTemp }}°</div>
-                <div class="text-sm text-white/60">Avg Temperature</div>
+                <div class="text-lg sm:text-xl md:text-2xl font-bold text-white">{{ stats.avgTemp }}°</div>
+                <div class="text-xs sm:text-sm text-white/60">Avg Temperature</div>
             </div>
             <div class="text-center">
-                <div class="text-2xl font-bold text-white">{{ stats.maxWind }} km/h</div>
-                <div class="text-sm text-white/60">Max Wind Speed</div>
+                <div class="text-lg sm:text-xl md:text-2xl font-bold text-white">{{ stats.maxWind }} km/h</div>
+                <div class="text-xs sm:text-sm text-white/60">Max Wind Speed</div>
             </div>
             <div class="text-center">
-                <div class="text-2xl font-bold text-white">{{ stats.avgHumidity }}%</div>
-                <div class="text-sm text-white/60">Avg Humidity</div>
+                <div class="text-lg sm:text-xl md:text-2xl font-bold text-white">{{ stats.avgHumidity }}%</div>
+                <div class="text-xs sm:text-sm text-white/60">Avg Humidity</div>
             </div>
             <div class="text-center">
-                <div class="text-2xl font-bold text-white">{{ stats.precipitation }} mm</div>
-                <div class="text-sm text-white/60">Total Precipitation</div>
+                <div class="text-lg sm:text-xl md:text-2xl font-bold text-white">{{ stats.precipitation }} mm</div>
+                <div class="text-xs sm:text-sm text-white/60">Total Precipitation</div>
             </div>
         </div>
     </div>
