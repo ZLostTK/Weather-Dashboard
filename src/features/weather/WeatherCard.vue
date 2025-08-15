@@ -2,18 +2,18 @@
     <div class="glass-card p-6 animate-fade-in">
         <div class="flex items-center justify-between mb-4">
             <div>
-                <h2 class="text-2xl font-bold text-white mb-1">
+                <h2 class="text-2xl font-bold text-card-foreground mb-1">
                     {{ weather?.location.name }}
                 </h2>
-                <p class="text-white/70 text-sm">
+                <p class="text-muted-foreground text-sm">
                     {{ weather?.location.region }}, {{ weather?.location.country }}
                 </p>
             </div>
             <div class="text-right">
-                <div class="text-4xl font-light text-white">
+                <div class="text-4xl font-light text-card-foreground">
                     {{ Math.round(weather?.current.temp_c || 0) }}°
                 </div>
-                <div class="text-white/70 text-sm">
+                <div class="text-muted-foreground text-sm">
                     Feels like {{ Math.round(weather?.current.feelslike_c || 0) }}°
                 </div>
             </div>
@@ -27,10 +27,10 @@
                     class="w-16 h-16"
                 />
                 <div>
-                    <div class="text-white font-medium">
+                    <div class="text-card-foreground font-medium">
                         {{ weather?.current.condition.text }}
                     </div>
-                    <div class="text-white/70 text-sm">
+                    <div class="text-muted-foreground text-sm">
                         Updated {{ formatTime(weather?.current.last_updated) }}
                     </div>
                 </div>
@@ -39,29 +39,29 @@
 
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <div class="text-center">
-                <Wind class="w-5 h-5 text-white/70 mx-auto mb-1" />
-                <div class="text-white text-sm">Wind</div>
-                <div class="text-white/70 text-xs">
+                <Wind class="w-5 h-5 text-muted-foreground mx-auto mb-1" />
+                <div class="text-card-foreground text-sm">Wind</div>
+                <div class="text-muted-foreground text-xs">
                     {{ weather?.current.wind_kph }}km/h {{ weather?.current.wind_dir }}
                 </div>
             </div>
 
             <div class="text-center">
-                <Droplets class="w-5 h-5 text-white/70 mx-auto mb-1" />
-                <div class="text-white text-sm">Humidity</div>
-                <div class="text-white/70 text-xs">{{ weather?.current.humidity }}%</div>
+                <Droplets class="w-5 h-5 text-muted-foreground mx-auto mb-1" />
+                <div class="text-card-foreground text-sm">Humidity</div>
+                <div class="text-muted-foreground text-xs">{{ weather?.current.humidity }}%</div>
             </div>
 
             <div class="text-center">
-                <Eye class="w-5 h-5 text-white/70 mx-auto mb-1" />
-                <div class="text-white text-sm">Visibility</div>
-                <div class="text-white/70 text-xs">{{ weather?.current.vis_km }}km</div>
+                <Eye class="w-5 h-5 text-muted-foreground mx-auto mb-1" />
+                <div class="text-card-foreground text-sm">Visibility</div>
+                <div class="text-muted-foreground text-xs">{{ weather?.current.vis_km }}km</div>
             </div>
 
             <div class="text-center">
-                <Gauge class="w-5 h-5 text-white/70 mx-auto mb-1" />
-                <div class="text-white text-sm">Pressure</div>
-                <div class="text-white/70 text-xs">{{ weather?.current.pressure_mb }}mb</div>
+                <Gauge class="w-5 h-5 text-muted-foreground mx-auto mb-1" />
+                <div class="text-card-foreground text-sm">Pressure</div>
+                <div class="text-muted-foreground text-xs">{{ weather?.current.pressure_mb }}mb</div>
             </div>
         </div>
     </div>
