@@ -28,25 +28,14 @@
                     </div>
 
                     <div class="flex items-center space-x-4">
-                        <!-- Location selector -->
-                        <div class="relative">
-                            <select
-                                v-model="currentLocation"
-                                @change="handleLocationChange"
-                                class="form-select pr-8"
-                            >
-                                <option
-                                    v-for="location in savedLocations"
-                                    :key="location.id"
-                                    :value="`${location.name}, ${location.region}`"
-                                >
-                                    {{ location.name }}, {{ location.region }}
-                                </option>
-                            </select>
-                            <ChevronDown
-                                class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none"
-                            />
-                        </div>
+                        <!-- Search Location Button -->
+                        <button
+                            @click="showLocationSearch = true"
+                            class="btn-ghost flex items-center space-x-2 px-4 py-2 border border-border hover:bg-accent"
+                        >
+                            <Search class="w-4 h-4" />
+                            <span class="hidden sm:inline">{{ currentLocation || 'Buscar ubicación' }}</span>
+                        </button>
 
                         <!-- Refresh button -->
                         <button
@@ -179,13 +168,118 @@
                     </div>
                 </div>
             </Teleport>
+
+            <!-- Location Search Modal -->
+            <Teleport to="body">
+                <div
+                    v-if="showLocationSearch"
+                    class="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-[9997] p-4"
+                    @click.self="showLocationSearch = false"
+                >
+                    <div class="bg-card backdrop-blur-md rounded-xl p-6 w-full max-w-lg mx-4 border border-border shadow-lg">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-semibold text-card-foreground">Buscar Ubicación</h3>
+                            <button
+                                @click="showLocationSearch = false"
+                                class="btn-ghost p-1"
+                            >
+                                <X class="w-5 h-5" />
+                            </button>
+                        </div>
+
+                        <div class="space-y-4">
+                            <!-- Search Input -->
+                            <div class="relative">
+                                <Search class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                                <input
+                                    v-model="searchQuery"
+                                    @input="searchLocations"
+                                    @keyup.enter="selectFirstResult"
+                                    type="text"
+                                    class="form-input pl-10 w-full"
+                                    placeholder="Buscar ciudad, país o región..."
+                                    :disabled="searchLoading"
+                                />
+                            </div>
+
+                            <!-- Search Results -->
+                            <div v-if="searchResults.length > 0" class="max-h-64 overflow-y-auto space-y-2">
+                                <div
+                                    v-for="result in searchResults"
+                                    :key="`${result.name}-${result.region}-${result.country}`"
+                                    @click="selectSearchResult(result)"
+                                    class="p-3 rounded-lg border border-border hover:bg-accent cursor-pointer transition-colors"
+                                >
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <div class="font-medium text-card-foreground">{{ result.name }}</div>
+                                            <div class="text-sm text-muted-foreground">
+                                                {{ result.region }}, {{ result.country }}
+                                            </div>
+                                        </div>
+                                        <button
+                                            @click.stop="addToSavedLocations(result)"
+                                            class="btn-ghost p-2 text-muted-foreground hover:text-primary"
+                                            title="Agregar a favoritos"
+                                        >
+                                            <Plus class="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Loading State -->
+                            <div v-else-if="searchLoading" class="text-center py-8">
+                                <RefreshCw class="w-8 h-8 mx-auto mb-2 animate-spin text-muted-foreground" />
+                                <p class="text-muted-foreground">Buscando ubicaciones...</p>
+                            </div>
+
+                            <!-- No Results -->
+                            <div v-else-if="searchQuery && !searchLoading && searchResults.length === 0" class="text-center py-8">
+                                <Search class="w-8 h-8 mx-auto mb-2 text-muted-foreground/60" />
+                                <p class="text-muted-foreground">No se encontraron ubicaciones</p>
+                                <p class="text-sm text-muted-foreground/60">Intenta con un nombre diferente</p>
+                            </div>
+
+                            <!-- Saved Locations -->
+                            <div v-if="savedLocations.length > 0" class="border-t border-border pt-4">
+                                <h4 class="font-medium text-card-foreground mb-3">Ubicaciones Guardadas</h4>
+                                <div class="space-y-2">
+                                    <div
+                                        v-for="location in savedLocations"
+                                        :key="location.id"
+                                        @click="selectSavedLocation(location)"
+                                        class="p-3 rounded-lg border border-border hover:bg-accent cursor-pointer transition-colors"
+                                    >
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <div class="font-medium text-card-foreground">{{ location.name }}</div>
+                                                <div class="text-sm text-muted-foreground">
+                                                    {{ location.region }}, {{ location.country }}
+                                                </div>
+                                            </div>
+                                            <button
+                                                @click.stop="removeSavedLocation(location.id)"
+                                                class="btn-ghost p-2 text-destructive hover:bg-destructive/10"
+                                                title="Eliminar de favoritos"
+                                            >
+                                                <Trash2 class="w-4 h-4" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Teleport>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { Cloud, ChevronDown, RefreshCw, Settings, X, AlertCircle } from 'lucide-vue-next';
+import { Cloud, Search, RefreshCw, Settings, X, AlertCircle, Plus, Trash2 } from 'lucide-vue-next';
 
 import { WeatherCard, ForecastChart, DailyForecast } from '@/features/weather';
 import { WeatherCharts } from '@/features/charts';
@@ -218,11 +312,84 @@ const {
 } = useWeather();
 
 const showSettings = ref(false);
+const showLocationSearch = ref(false);
 const newApiKey = ref('');
+const searchQuery = ref('');
+const searchResults = ref<any[]>([]);
+const searchLoading = ref(false);
+let searchTimeout: ReturnType<typeof setTimeout> | null = null;
 
 // Theme management
 const appStore = useAppStore();
 const selectedTheme = ref(appStore.theme);
+
+// Search functionality
+const searchLocations = () => {
+    // Clear previous timeout
+    if (searchTimeout) {
+        clearTimeout(searchTimeout);
+    }
+
+    // Set new timeout for debounced search
+    searchTimeout = setTimeout(async () => {
+        if (!searchQuery.value.trim() || searchQuery.value.length < 2) {
+            searchResults.value = [];
+            return;
+        }
+
+        searchLoading.value = true;
+        try {
+            // Use WeatherAPI search endpoint
+            const response = await fetch(
+                `https://api.weatherapi.com/v1/search.json?key=${apiKey.value}&q=${encodeURIComponent(searchQuery.value)}`
+            );
+            
+            if (response.ok) {
+                const data = await response.json();
+                searchResults.value = data.slice(0, 10); // Limit to 10 results
+            } else {
+                searchResults.value = [];
+            }
+        } catch (error) {
+            console.error('Error searching locations:', error);
+            searchResults.value = [];
+        } finally {
+            searchLoading.value = false;
+        }
+    }, 500); // 500ms delay
+};
+
+const selectSearchResult = (result: any) => {
+    currentLocation.value = `${result.name}, ${result.region}`;
+    showLocationSearch.value = false;
+    searchQuery.value = '';
+    searchResults.value = [];
+    refreshWeather();
+};
+
+const selectFirstResult = () => {
+    if (searchResults.value.length > 0) {
+        selectSearchResult(searchResults.value[0]);
+    }
+};
+
+const selectSavedLocation = (location: any) => {
+    currentLocation.value = `${location.name}, ${location.region}`;
+    showLocationSearch.value = false;
+    refreshWeather();
+};
+
+const addToSavedLocations = (result: any) => {
+    const newLocation = {
+        id: Date.now().toString(),
+        name: result.name,
+        region: result.region,
+        country: result.country,
+        lat: result.lat,
+        lon: result.lon,
+    };
+    addSavedLocation(newLocation);
+};
 
 const handleLocationChange = () => {
     refreshWeather();
@@ -263,6 +430,14 @@ onMounted(async () => {
 
     if (apiKey.value) {
         await refreshWeather();
+    }
+});
+
+// Cleanup on unmount
+onUnmounted(() => {
+    if (searchTimeout) {
+        clearTimeout(searchTimeout);
+        searchTimeout = null;
     }
 });
 </script>
