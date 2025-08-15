@@ -264,7 +264,7 @@
                                                 title="Eliminar de favoritos"
                                             >
                                                 <Trash2 class="w-4 h-4" />
-                                            </div>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -278,7 +278,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { Cloud, Search, RefreshCw, Settings, X, AlertCircle, Plus, Trash2 } from 'lucide-vue-next';
 
 import { WeatherCard, ForecastChart, DailyForecast } from '@/features/weather';
