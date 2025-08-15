@@ -3,14 +3,14 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-4">
             <h3 class="text-lg sm:text-xl font-semibold text-white flex items-center">
                 <MapPin class="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                Saved Locations
+                Ubicaciones Guardadas
             </h3>
             <div class="flex w-full sm:w-auto">
                 <div class="relative flex-1 sm:flex-none">
                     <input
                         v-model="searchQuery"
                         type="text"
-                        placeholder="Search locations..."
+                        placeholder="Buscar ubicaciones..."
                         class="w-full pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-white/40 text-sm sm:text-base"
                         @input="handleSearch"
                     />
@@ -22,9 +22,19 @@
         </div>
 
         <!-- Search Results -->
-        <div v-if="searchResults.length > 0" class="mb-4 sm:mb-6">
-            <h4 class="text-white/80 text-sm mb-2 sm:mb-3">Search Results:</h4>
-            <div class="space-y-2">
+        <div v-if="searchResults.length > 0 || searchLoading" class="mb-4 sm:mb-6">
+            <h4 class="text-white/80 text-sm mb-2 sm:mb-3">
+                {{ searchLoading ? 'Buscando...' : 'Resultados de búsqueda:' }}
+            </h4>
+
+            <!-- Loading indicator -->
+            <div v-if="searchLoading" class="flex items-center justify-center py-4">
+                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+                <span class="ml-2 text-white/60 text-sm">Buscando ubicaciones...</span>
+            </div>
+
+            <!-- Search results -->
+            <div v-else class="space-y-2">
                 <div
                     v-for="result in searchResults"
                     :key="`${result.lat}-${result.lon}`"
@@ -32,7 +42,9 @@
                     @click="addLocation(result)"
                 >
                     <div class="min-w-0 flex-1">
-                        <div class="text-white font-medium text-sm sm:text-base truncate">{{ result.name }}</div>
+                        <div class="text-white font-medium text-sm sm:text-base truncate">
+                            {{ result.name }}
+                        </div>
                         <div class="text-white/60 text-xs sm:text-sm truncate">
                             {{ result.region }}, {{ result.country }}
                         </div>
@@ -45,7 +57,7 @@
         <!-- Saved Locations -->
         <div class="space-y-2 sm:space-y-3">
             <div
-                v-for="location in savedLocations"
+                v-for="location in savedLocationsList"
                 :key="location.id"
                 class="group relative p-3 sm:p-4 bg-white/5 hover:bg-white/10 rounded-lg transition-all duration-200 hover:scale-[1.02]"
             >
@@ -59,7 +71,7 @@
                                 <MapPin class="w-4 h-4 sm:w-5 sm:h-5 text-white/70" />
                             </div>
                             <div
-                                v-if="location.isDefault"
+                                v-if="location.isFavorite"
                                 class="absolute -top-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-yellow-400 rounded-full flex items-center justify-center"
                             >
                                 <Star class="w-1.5 h-1.5 sm:w-2 sm:h-2 text-white fill-current" />
@@ -72,24 +84,18 @@
                                     {{ location.name }}
                                 </div>
                                 <div
-                                    v-if="location.isDefault"
+                                    v-if="location.isFavorite"
                                     class="px-2 py-1 bg-yellow-400/20 text-yellow-400 text-xs rounded-full w-fit"
                                 >
-                                    Default
+                                    Favorito
                                 </div>
                             </div>
                             <div class="text-white/60 text-xs sm:text-sm truncate">
-                                {{ location.region }}, {{ location.country }}
+                                Ubicación guardada
                             </div>
-                            <div class="text-white/40 text-xs mt-1 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-                                <span class="truncate"
-                                    >{{ location.lat.toFixed(2) }}°,
-                                    {{ location.lon.toFixed(2) }}°</span
-                                >
-                                <span class="flex items-center">
-                                    <Clock class="w-3 h-3 mr-1" />
-                                    {{ getLocalTime(location) }}
-                                </span>
+                            <div class="text-white/40 text-xs mt-1 flex items-center">
+                                <Clock class="w-3 h-3 mr-1" />
+                                {{ getCurrentTime() }}
                             </div>
                         </div>
                     </div>
@@ -119,101 +125,60 @@
                         class="flex items-center justify-center sm:justify-end space-x-1 opacity-70 group-hover:opacity-100 transition-opacity w-full sm:w-auto"
                     >
                         <button
-                            @click="setAsDefault(location.id)"
+                            @click="toggleFavoriteLocation(location.id)"
                             :class="[
                                 'p-1.5 sm:p-2 rounded-lg transition-all duration-200',
-                                location.isDefault
+                                location.isFavorite
                                     ? 'bg-yellow-400/20 text-yellow-400 scale-110'
                                     : 'hover:bg-white/10 text-white/60 hover:text-yellow-400 hover:scale-110',
                             ]"
-                            :title="location.isDefault ? 'Default location' : 'Set as default'"
+                            :title="
+                                location.isFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos'
+                            "
                         >
-                            <Star class="w-3.5 h-3.5 sm:w-4 sm:h-4" :class="{ 'fill-current': location.isDefault }" />
+                            <Star
+                                class="w-3.5 h-3.5 sm:w-4 sm:h-4"
+                                :class="{ 'fill-current': location.isFavorite }"
+                            />
                         </button>
 
                         <button
                             @click="selectLocation(location)"
                             class="p-1.5 sm:p-2 hover:bg-blue-500/20 rounded-lg text-blue-400 transition-all duration-200 hover:scale-110"
-                            title="View weather for this location"
+                            title="Ver clima para esta ubicación"
                         >
                             <Eye class="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         </button>
 
                         <button
-                            @click="showLocationDetails(location)"
-                            class="p-1.5 sm:p-2 hover:bg-gray-500/20 rounded-lg text-gray-400 transition-all duration-200 hover:scale-110"
-                            title="View details"
-                        >
-                            <Info class="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                        </button>
-
-                        <button
                             @click="removeLocation(location.id)"
                             class="p-1.5 sm:p-2 hover:bg-red-500/20 rounded-lg text-red-400 transition-all duration-200 hover:scale-110"
-                            title="Remove location"
-                            :disabled="location.isDefault && savedLocations.length > 1"
+                            title="Eliminar ubicación"
                         >
                             <Trash2 class="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         </button>
                     </div>
                 </div>
-
-                <!-- Expandable details -->
-                <div
-                    v-if="expandedLocation === location.id"
-                    class="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-white/10 animate-fade-in"
-                >
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 text-xs sm:text-sm">
-                        <div class="text-center">
-                            <Globe class="w-3 h-3 sm:w-4 sm:h-4 text-blue-400 mx-auto mb-1" />
-                            <div class="text-white/80 text-xs sm:text-sm">{{ location.country }}</div>
-                            <div class="text-white/60 text-xs">Country</div>
-                        </div>
-                        <div class="text-center">
-                            <MapPin class="w-3 h-3 sm:w-4 sm:h-4 text-green-400 mx-auto mb-1" />
-                            <div class="text-white/80 text-xs sm:text-sm">{{ location.region }}</div>
-                            <div class="text-white/60 text-xs">Region</div>
-                        </div>
-                        <div class="text-center">
-                            <Navigation class="w-3 h-3 sm:w-4 sm:h-4 text-purple-400 mx-auto mb-1" />
-                            <div class="text-white/80 text-xs sm:text-sm">{{ location.lat.toFixed(4) }}°</div>
-                            <div class="text-white/60 text-xs">Latitude</div>
-                        </div>
-                        <div class="text-center">
-                            <Navigation class="w-3 h-3 sm:w-4 sm:h-4 text-orange-400 mx-auto mb-1" />
-                            <div class="text-white/80 text-xs sm:text-sm">{{ location.lon.toFixed(4) }}°</div>
-                            <div class="text-white/60 text-xs">Longitude</div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
-        <div v-if="savedLocations.length === 0" class="text-center py-6 sm:py-8">
+        <div v-if="savedLocationsList.length === 0" class="text-center py-6 sm:py-8">
             <MapPin class="w-10 h-10 sm:w-12 sm:h-12 text-white/40 mx-auto mb-2 sm:mb-3" />
-            <p class="text-white/60 mb-1 sm:mb-2 text-sm sm:text-base">No saved locations</p>
+            <p class="text-white/60 mb-1 sm:mb-2 text-sm sm:text-base">
+                No hay ubicaciones guardadas
+            </p>
             <p class="text-white/40 text-xs sm:text-sm">
-                Search for locations above to add them to your favorites
+                Busca ubicaciones arriba para agregarlas a tus favoritos
             </p>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import {
-    MapPin,
-    Search,
-    Plus,
-    Star,
-    Eye,
-    Trash2,
-    Clock,
-    Info,
-    Globe,
-    Navigation,
-} from 'lucide-vue-next';
+import { ref, watch, onMounted, computed } from 'vue';
+import { MapPin, Search, Plus, Star, Eye, Trash2, Clock } from 'lucide-vue-next';
 import type { SavedLocation } from '@/shared/types/weather';
+import { useWeather } from '@/shared/composables/useWeather';
 
 interface SearchResult {
     name: string;
@@ -223,80 +188,89 @@ interface SearchResult {
     lon: number;
 }
 
-interface Props {
-    savedLocations: SavedLocation[];
-}
+// No longer need props since we're using the composable directly
+// interface Props {
+//     savedLocations: SavedLocation[];
+// }
 
-const props = defineProps<Props>();
+// const props = defineProps<Props>();
 
 const emit = defineEmits<{
     addLocation: [location: Omit<SavedLocation, 'id'>];
     removeLocation: [id: string];
-    setDefault: [id: string];
     selectLocation: [location: SavedLocation];
-    searchLocations: [query: string];
 }>();
+
+// Use the weather composable
+const {
+    searchLocations: searchLocationsApi,
+    addSavedLocation,
+    removeSavedLocation,
+    toggleFavorite,
+    savedLocations,
+} = useWeather();
 
 const searchQuery = ref('');
 const searchResults = ref<SearchResult[]>([]);
-const expandedLocation = ref<string | null>(null);
+const searchLoading = ref(false);
+const searchTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
+
+// Computed property to access savedLocations from the composable
+const savedLocationsList = computed(() => savedLocations.value);
 
 const handleSearch = async () => {
+    // Clear previous timeout
+    if (searchTimeout.value) {
+        clearTimeout(searchTimeout.value);
+    }
+
     if (searchQuery.value.length < 3) {
         searchResults.value = [];
         return;
     }
 
-    // Mock search results for demo
-    const mockResults: SearchResult[] = [
-        {
-            name: 'London',
-            region: 'England',
-            country: 'United Kingdom',
-            lat: 51.5074,
-            lon: -0.1278,
-        },
-        {
-            name: 'New York',
-            region: 'New York',
-            country: 'United States',
-            lat: 40.7128,
-            lon: -74.006,
-        },
-        { name: 'Tokyo', region: 'Tokyo', country: 'Japan', lat: 35.6762, lon: 139.6503 },
-        { name: 'Paris', region: 'Île-de-France', country: 'France', lat: 48.8566, lon: 2.3522 },
-        {
-            name: 'Sydney',
-            region: 'New South Wales',
-            country: 'Australia',
-            lat: -33.8688,
-            lon: 151.2093,
-        },
-    ];
-
-    // Filter results based on search query
-    searchResults.value = mockResults.filter(
-        result =>
-            result.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-            result.region.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-            result.country.toLowerCase().includes(searchQuery.value.toLowerCase())
-    );
+    // Set new timeout for debounced search
+    searchTimeout.value = setTimeout(async () => {
+        searchLoading.value = true;
+        try {
+            const results = await searchLocationsApi(searchQuery.value);
+            searchResults.value = results.map(
+                (result: {
+                    name: string;
+                    region?: string;
+                    country: string;
+                    lat: number;
+                    lon: number;
+                }) => ({
+                    name: result.name,
+                    region: result.region || result.country,
+                    country: result.country,
+                    lat: result.lat,
+                    lon: result.lon,
+                })
+            );
+        } catch (error) {
+            console.error('Error searching locations:', error);
+            searchResults.value = [];
+        } finally {
+            searchLoading.value = false;
+        }
+    }, 500); // 500ms delay
 };
 
 const addLocation = (result: SearchResult) => {
-    // Check if location already exists
-    const exists = props.savedLocations.some(
-        loc => Math.abs(loc.lat - result.lat) < 0.01 && Math.abs(loc.lon - result.lon) < 0.01
+    // Check if location already exists by name
+    const exists = savedLocations.value.some(
+        (loc: SavedLocation) => loc.name.toLowerCase() === result.name.toLowerCase()
     );
 
     if (!exists) {
+        addSavedLocation(result);
+
+        // Emit event for parent component
         emit('addLocation', {
             name: result.name,
-            region: result.region,
-            country: result.country,
-            lat: result.lat,
-            lon: result.lon,
-            isDefault: props.savedLocations.length === 0, // First location becomes default
+            isFavorite: false,
         });
     }
 
@@ -306,28 +280,23 @@ const addLocation = (result: SearchResult) => {
 };
 
 const removeLocation = (id: string) => {
+    removeSavedLocation(id);
     emit('removeLocation', id);
 };
 
-const setAsDefault = (id: string) => {
-    emit('setDefault', id);
+const toggleFavoriteLocation = (id: string) => {
+    console.log('Toggling favorite for location:', id);
+    console.log('Before toggle:', savedLocations.value.find(loc => loc.id === id)?.isFavorite);
+    toggleFavorite(id);
+    console.log('After toggle:', savedLocations.value.find(loc => loc.id === id)?.isFavorite);
 };
 
 const selectLocation = (location: SavedLocation) => {
     emit('selectLocation', location);
 };
 
-const showLocationDetails = (location: SavedLocation) => {
-    expandedLocation.value = expandedLocation.value === location.id ? null : location.id;
-};
-
-const getLocalTime = (location: SavedLocation) => {
-    // Simple timezone approximation based on longitude
-    const timezoneOffset = Math.round(location.lon / 15);
-    const now = new Date();
-    const utc = now.getTime() + now.getTimezoneOffset() * 60000;
-    const localTime = new Date(utc + timezoneOffset * 3600000);
-    return localTime.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+const getCurrentTime = () => {
+    return new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
 };
 
 const getLocationWeather = (location: SavedLocation) => {
@@ -353,5 +322,14 @@ watch(searchQuery, newQuery => {
     if (!newQuery) {
         searchResults.value = [];
     }
+});
+
+// Cleanup timeout on component unmount
+onMounted(() => {
+    return () => {
+        if (searchTimeout.value) {
+            clearTimeout(searchTimeout.value);
+        }
+    };
 });
 </script>

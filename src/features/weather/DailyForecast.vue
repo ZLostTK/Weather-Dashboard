@@ -2,8 +2,10 @@
     <div class="glass-card p-4 sm:p-6 animate-slide-up">
         <div class="flex flex-col gap-3 sm:gap-4 mb-4 sm:mb-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <h3 class="text-lg sm:text-xl font-semibold text-card-foreground">Pronóstico del Tiempo</h3>
-                
+                <h3 class="text-lg sm:text-xl font-semibold text-card-foreground">
+                    Pronóstico del Tiempo
+                </h3>
+
                 <!-- Period Selector -->
                 <div class="flex space-x-1 sm:space-x-2">
                     <button
@@ -26,7 +28,10 @@
                 @click="showDetails = !showDetails"
                 class="text-muted-foreground hover:text-foreground transition-colors text-xs sm:text-sm flex items-center justify-center sm:justify-start space-x-1 w-full sm:w-auto"
             >
-                <component :is="showDetails ? ChevronUp : ChevronDown" class="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <component
+                    :is="showDetails ? ChevronUp : ChevronDown"
+                    class="w-3.5 h-3.5 sm:w-4 sm:h-4"
+                />
                 <span>{{ showDetails ? 'Menos' : 'Más' }} Detalles</span>
             </button>
         </div>
@@ -34,7 +39,7 @@
         <!-- Hourly View -->
         <div v-if="selectedPeriod === 'hourly'" class="space-y-2 sm:space-y-3">
             <div
-                v-for="(hour, index) in hourlyData"
+                v-for="(hour, index) in showDetails ? hourlyData : hourlyData.slice(0, 3)"
                 :key="hour.time_epoch"
                 :class="[
                     'rounded-lg bg-card/5 hover:bg-accent/50 transition-all duration-200 cursor-pointer',
@@ -45,7 +50,9 @@
             >
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div class="flex items-center space-x-2 sm:space-x-4">
-                        <div class="text-card-foreground font-medium w-16 sm:w-20 text-sm sm:text-base">
+                        <div
+                            class="text-card-foreground font-medium w-16 sm:w-20 text-sm sm:text-base"
+                        >
                             {{ formatHour(hour.time) }}
                         </div>
                         <div class="relative">
@@ -65,11 +72,10 @@
                             <div class="text-white font-medium text-sm sm:text-base truncate">
                                 {{ hour.condition.text }}
                             </div>
-                            <div class="text-muted-foreground text-xs sm:text-sm flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 mt-1">
-                                <span
-                                    v-if="hour.chance_of_rain > 0"
-                                    class="flex items-center"
-                                >
+                            <div
+                                class="text-muted-foreground text-xs sm:text-sm flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 mt-1"
+                            >
+                                <span v-if="hour.chance_of_rain > 0" class="flex items-center">
                                     <Droplets class="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1" />
                                     {{ hour.chance_of_rain }}%
                                 </span>
@@ -85,16 +91,22 @@
                         </div>
                     </div>
 
-                    <div class="flex items-center justify-center sm:justify-end space-x-2 sm:space-x-4 w-full sm:w-auto">
+                    <div
+                        class="flex items-center justify-center sm:justify-end space-x-2 sm:space-x-4 w-full sm:w-auto"
+                    >
                         <div class="text-right">
                             <div class="text-white font-bold text-base sm:text-lg">
                                 {{ Math.round(hour.temp_c) }}°
                             </div>
-                            <div class="text-muted-foreground text-xs sm:text-sm">{{ Math.round(hour.feelslike_c) }}°</div>
+                            <div class="text-muted-foreground text-xs sm:text-sm">
+                                {{ Math.round(hour.feelslike_c) }}°
+                            </div>
                         </div>
 
                         <!-- Enhanced temperature bar -->
-                        <div class="relative w-20 sm:w-24 h-2.5 sm:h-3 bg-muted/30 rounded-full overflow-hidden">
+                        <div
+                            class="relative w-20 sm:w-24 h-2.5 sm:h-3 bg-muted/30 rounded-full overflow-hidden"
+                        >
                             <div
                                 class="absolute left-0 top-0 h-full rounded-full transition-all duration-500"
                                 :class="getTemperatureColor(hour.temp_c)"
@@ -155,23 +167,33 @@
 
                     <!-- Additional hour info -->
                     <div class="bg-card/5 rounded-lg p-3">
-                        <h6 class="text-muted-foreground text-sm font-medium mb-2">Información Adicional</h6>
+                        <h6 class="text-muted-foreground text-sm font-medium mb-2">
+                            Información Adicional
+                        </h6>
                         <div class="grid grid-cols-2 gap-3 text-sm">
                             <div class="flex justify-between">
                                 <span class="text-muted-foreground">Humedad:</span>
-                                <span class="text-card-foreground">{{ Math.round(hour.humidity) }}%</span>
+                                <span class="text-card-foreground"
+                                    >{{ Math.round(hour.humidity) }}%</span
+                                >
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-muted-foreground">Presión:</span>
-                                <span class="text-card-foreground">{{ Math.round(hour.pressure_mb) }}mb</span>
+                                <span class="text-card-foreground"
+                                    >{{ Math.round(hour.pressure_mb) }}mb</span
+                                >
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-muted-foreground">Sensación:</span>
-                                <span class="text-card-foreground">{{ Math.round(hour.feelslike_c) }}°C</span>
+                                <span class="text-card-foreground"
+                                    >{{ Math.round(hour.feelslike_c) }}°C</span
+                                >
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-muted-foreground">Punto rocío:</span>
-                                <span class="text-card-foreground">{{ Math.round(hour.dewpoint_c) }}°C</span>
+                                <span class="text-card-foreground"
+                                    >{{ Math.round(hour.dewpoint_c) }}°C</span
+                                >
                             </div>
                         </div>
                     </div>
@@ -182,7 +204,9 @@
         <!-- Daily View -->
         <div v-if="selectedPeriod === 'daily'" class="space-y-3">
             <div
-                v-for="(day, index) in forecast?.forecast.forecastday || []"
+                v-for="(day, index) in showDetails
+                    ? forecast?.forecast.forecastday || []
+                    : (forecast?.forecast.forecastday || []).slice(0, 3)"
                 :key="day.date"
                 :class="[
                     'rounded-lg bg-card/5 hover:bg-accent/50 transition-all duration-200 cursor-pointer',
@@ -213,7 +237,9 @@
                             <div class="text-card-foreground font-medium">
                                 {{ day.day.condition.text }}
                             </div>
-                            <div class="text-muted-foreground text-sm flex items-center space-x-4 mt-1">
+                            <div
+                                class="text-muted-foreground text-sm flex items-center space-x-4 mt-1"
+                            >
                                 <span
                                     v-if="day.day.daily_chance_of_rain > 0"
                                     class="flex items-center"
@@ -238,7 +264,9 @@
                             <div class="text-card-foreground font-bold text-lg">
                                 {{ Math.round(day.day.maxtemp_c) }}°
                             </div>
-                            <div class="text-muted-foreground">{{ Math.round(day.day.mintemp_c) }}°</div>
+                            <div class="text-muted-foreground">
+                                {{ Math.round(day.day.mintemp_c) }}°
+                            </div>
                         </div>
 
                         <!-- Enhanced temperature bar -->
@@ -271,7 +299,9 @@
                 >
                     <!-- Hourly forecast preview -->
                     <div>
-                        <h5 class="text-muted-foreground text-sm font-medium mb-2">Vista Previa por Hora</h5>
+                        <h5 class="text-muted-foreground text-sm font-medium mb-2">
+                            Vista Previa por Hora
+                        </h5>
                         <div class="flex space-x-3 overflow-x-auto pb-2">
                             <div
                                 v-for="hour in getHourlyPreview(day.hour)"
@@ -311,7 +341,9 @@
                         </div>
                         <div class="bg-card/5 rounded-lg p-3 text-center">
                             <Sun class="w-4 h-4 text-yellow-400 mx-auto mb-1" />
-                            <div class="text-card-foreground text-sm font-medium">{{ day.day.uv }}</div>
+                            <div class="text-card-foreground text-sm font-medium">
+                                {{ day.day.uv }}
+                            </div>
                             <div class="text-muted-foreground text-xs">UV Index</div>
                         </div>
                         <div class="bg-card/5 rounded-lg p-3 text-center">
@@ -325,7 +357,9 @@
 
                     <!-- Astronomical info -->
                     <div class="bg-card/5 rounded-lg p-3">
-                        <h6 class="text-muted-foreground text-sm font-medium mb-2">Datos Astronómicos</h6>
+                        <h6 class="text-muted-foreground text-sm font-medium mb-2">
+                            Datos Astronómicos
+                        </h6>
                         <div class="grid grid-cols-2 gap-3 text-sm">
                             <div class="flex justify-between">
                                 <span class="text-muted-foreground">Amanecer:</span>
@@ -378,7 +412,7 @@ const selectedPeriod = ref<'hourly' | 'daily'>('daily');
 
 const periods = [
     { key: 'hourly' as const, label: '24 Horas' },
-    { key: 'daily' as const, label: '7 Días' },
+    { key: 'daily' as const, label: '3 días' },
 ];
 
 const toggleDayDetails = (index: number) => {
@@ -419,7 +453,14 @@ const formatHour = (timeString: string) => {
     return date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
 };
 
-const getHourlyPreview = (hours: Array<{ time: string; time_epoch: number; temp_c: number; condition: { icon: string; text: string } }>) => {
+const getHourlyPreview = (
+    hours: Array<{
+        time: string;
+        time_epoch: number;
+        temp_c: number;
+        condition: { icon: string; text: string };
+    }>
+) => {
     // Show every 3rd hour for a cleaner preview
     return hours.filter((_, index) => index % 3 === 0).slice(0, 8);
 };

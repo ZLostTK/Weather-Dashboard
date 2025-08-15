@@ -88,7 +88,7 @@ const selectedPeriod = ref<'hourly' | 'daily'>('hourly');
 
 const periods = [
     { key: 'hourly' as const, label: '24 Hours' },
-    { key: 'daily' as const, label: '7 Days' },
+    { key: 'daily' as const, label: '3 days' },
 ];
 
 // Fallback data generator in case forecast data is missing or incomplete
@@ -175,7 +175,7 @@ const createChart = async () => {
             console.error('❌ Could not get 2D context');
             return;
         }
-        
+
         // Verify context is working by testing save/restore
         try {
             ctx.save();
@@ -221,7 +221,7 @@ const createChart = async () => {
                     }
                 }
             } else {
-                // Get 7 days
+                // Get 3 days
                 const days = props.forecast.forecast.forecastday;
                 if (days && days.length > 0) {
                     labels = days.map(day => {
@@ -361,7 +361,10 @@ const createChart = async () => {
                                 size: 11,
                             },
                             callback: function (tickValue: string | number) {
-                                const value = typeof tickValue === 'string' ? parseFloat(tickValue) : tickValue;
+                                const value =
+                                    typeof tickValue === 'string'
+                                        ? parseFloat(tickValue)
+                                        : tickValue;
                                 return Math.round(value) + '°C';
                             },
                         },
@@ -414,8 +417,6 @@ watch(
         }
     }
 );
-
-
 
 // Cleanup on unmount
 onUnmounted(() => {

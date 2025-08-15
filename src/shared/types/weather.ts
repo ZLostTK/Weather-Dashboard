@@ -136,9 +136,5 @@ export interface WeatherAlert {
 export interface SavedLocation {
     id: string;
     name: string;
-    region: string;
-    country: string;
-    lat: number;
-    lon: number;
-    isDefault: boolean;
+    isFavorite: boolean;
 }

@@ -61,7 +61,9 @@
             <div class="text-center">
                 <Gauge class="w-5 h-5 text-muted-foreground mx-auto mb-1" />
                 <div class="text-card-foreground text-sm">Pressure</div>
-                <div class="text-muted-foreground text-xs">{{ weather?.current.pressure_mb }}mb</div>
+                <div class="text-muted-foreground text-xs">
+                    {{ weather?.current.pressure_mb }}mb
+                </div>
             </div>
         </div>
     </div>

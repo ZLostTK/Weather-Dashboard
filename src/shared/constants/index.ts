@@ -187,5 +187,5 @@ export const SUCCESS_MESSAGES = {
 } as const;
 
 // Export all constants
-export * from './routes';
+export * from '../../core/router/routes';
 export * from './themes';

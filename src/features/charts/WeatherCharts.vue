@@ -30,14 +30,18 @@
 
             <!-- Secondary Charts -->
             <div class="bg-white/5 rounded-lg p-3 sm:p-4">
-                <h4 class="text-xs sm:text-sm font-medium text-white/80 mb-2 sm:mb-3">Humidity & Pressure</h4>
+                <h4 class="text-xs sm:text-sm font-medium text-white/80 mb-2 sm:mb-3">
+                    Humidity & Pressure
+                </h4>
                 <div class="h-24 sm:h-28 md:h-32 w-full">
                     <canvas ref="humidityChartRef"></canvas>
                 </div>
             </div>
 
             <div class="bg-white/5 rounded-lg p-3 sm:p-4">
-                <h4 class="text-xs sm:text-sm font-medium text-white/80 mb-2 sm:mb-3">Wind Analysis</h4>
+                <h4 class="text-xs sm:text-sm font-medium text-white/80 mb-2 sm:mb-3">
+                    Wind Analysis
+                </h4>
                 <div class="h-24 sm:h-28 md:h-32 w-full">
                     <canvas ref="windChartRef"></canvas>
                 </div>
@@ -47,19 +51,27 @@
         <!-- Chart Statistics -->
         <div class="mt-4 sm:mt-6 grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
             <div class="text-center">
-                <div class="text-lg sm:text-xl md:text-2xl font-bold text-white">{{ stats.avgTemp }}°</div>
+                <div class="text-lg sm:text-xl md:text-2xl font-bold text-white">
+                    {{ stats.avgTemp }}°
+                </div>
                 <div class="text-xs sm:text-sm text-white/60">Avg Temperature</div>
             </div>
             <div class="text-center">
-                <div class="text-lg sm:text-xl md:text-2xl font-bold text-white">{{ stats.maxWind }} km/h</div>
+                <div class="text-lg sm:text-xl md:text-2xl font-bold text-white">
+                    {{ stats.maxWind }} km/h
+                </div>
                 <div class="text-xs sm:text-sm text-white/60">Max Wind Speed</div>
             </div>
             <div class="text-center">
-                <div class="text-lg sm:text-xl md:text-2xl font-bold text-white">{{ stats.avgHumidity }}%</div>
+                <div class="text-lg sm:text-xl md:text-2xl font-bold text-white">
+                    {{ stats.avgHumidity }}%
+                </div>
                 <div class="text-xs sm:text-sm text-white/60">Avg Humidity</div>
             </div>
             <div class="text-center">
-                <div class="text-lg sm:text-xl md:text-2xl font-bold text-white">{{ stats.precipitation }} mm</div>
+                <div class="text-lg sm:text-xl md:text-2xl font-bold text-white">
+                    {{ stats.precipitation }} mm
+                </div>
                 <div class="text-xs sm:text-sm text-white/60">Total Precipitation</div>
             </div>
         </div>
@@ -204,13 +216,16 @@ const createMainChart = async () => {
             console.error('❌ WeatherCharts: Could not get 2D context');
             return;
         }
-        
+
         // Verify context is working by testing save/restore
         try {
             ctx.save();
             ctx.restore();
         } catch (contextError) {
-            console.error('❌ WeatherCharts: Canvas context is not functioning properly:', contextError);
+            console.error(
+                '❌ WeatherCharts: Canvas context is not functioning properly:',
+                contextError
+            );
             return;
         }
     } catch (error) {
@@ -372,7 +387,9 @@ const createMainChart = async () => {
 
         mainChart.value = new ChartJS(ctx, {
             type:
-                activeChart.value === 'precipitation' || activeChart.value === 'wind' ? 'bar' : 'line',
+                activeChart.value === 'precipitation' || activeChart.value === 'wind'
+                    ? 'bar'
+                    : 'line',
             data: { labels, datasets },
             options: {
                 responsive: true,
@@ -395,7 +412,7 @@ const createMainChart = async () => {
                 scales,
             },
         });
-        
+
         console.log('✅ WeatherCharts: Main chart created successfully');
     } catch (error) {
         console.error('❌ WeatherCharts: Error creating main chart:', error);
@@ -431,7 +448,7 @@ const createHumidityChart = async () => {
             console.error('❌ WeatherCharts: Could not get humidity chart context');
             return;
         }
-        
+
         // Test context functionality
         ctx.save();
         ctx.restore();
@@ -525,7 +542,7 @@ const createWindChart = async () => {
             console.error('❌ WeatherCharts: Could not get wind chart context');
             return;
         }
-        
+
         // Test context functionality
         ctx.save();
         ctx.restore();

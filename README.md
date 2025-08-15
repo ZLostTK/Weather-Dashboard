@@ -9,7 +9,7 @@ Un dashboard meteorológico moderno, interactivo y completo construido con Vue 3
 ### 🎯 Funcionalidades Core
 
 - **🌡️ Información Meteorológica en Tiempo Real** - Datos actuales de temperatura, humedad, viento y más
-- **📊 Pronósticos Detallados** - Pronósticos horarios y de 7 días con detalles completos
+- **📊 Pronósticos Detallados** - Pronósticos horarios y de 3 días con detalles completos
 - **🗺️ Mapas Meteorológicos Interactivos** - Visualización de temperatura, precipitación, nubes y viento
 - **📈 Análisis y Gráficos** - Visualizaciones avanzadas con Chart.js
 - **🔔 Alertas Personalizadas** - Sistema de notificaciones meteorológicas configurables
@@ -99,7 +99,7 @@ src/
 │   ├── WeatherCard.vue # Tarjeta principal del clima
 │   ├── WeatherMap.vue  # Mapa interactivo
 │   ├── WeatherCharts.vue # Gráficos y análisis
-│   ├── DailyForecast.vue # Pronóstico de 7 días
+│   ├── DailyForecast.vue # Pronóstico de 3 días
 │   ├── WeatherAlerts.vue # Sistema de alertas
 │   └── LocationManager.vue # Gestión de ubicaciones
 ├── composables/        # Lógica reutilizable de Vue
@@ -145,7 +145,7 @@ Mapa interactivo que incluye:
 
 Pronóstico extendido con:
 
-- Vista de 7 días con detalles expandibles
+- Vista de 3 días con detalles expandibles
 - Pronósticos horarios
 - Datos astronómicos (amanecer, atardecer, fases lunares)
 - Métricas detalladas por día
