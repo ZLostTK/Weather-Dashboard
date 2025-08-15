@@ -48,7 +48,7 @@ jobs:
               run: npm run build
 
             - name: Upload build artifacts
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                   name: dist
                   path: dist
@@ -76,7 +76,7 @@ jobs:
               run: npm run build
 
             - name: Deploy to Vercel
-              uses: vercel/action@v1
+              uses: amondnet/vercel-action@v25
               with:
                   vercel-token: ${{ secrets.VERCEL_TOKEN }}
                   vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
@@ -106,7 +106,7 @@ jobs:
               run: npm run build
 
             - name: Deploy to Netlify
-              uses: netlify/actions/build@master
+              uses: nwtgck/actions-netlify@v2.0
               env:
                   NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
                   NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
