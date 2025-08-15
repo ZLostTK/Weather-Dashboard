@@ -1,7 +1,7 @@
 <template>
     <div class="glass-card p-4 sm:p-6 animate-fade-in">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-4">
-            <h3 class="text-lg sm:text-xl font-semibold text-white flex items-center">
+            <h3 class="text-lg sm:text-xl font-semibold text-card-foreground flex items-center">
                 <MapPin class="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                 Ubicaciones Guardadas
             </h3>
@@ -11,11 +11,11 @@
                         v-model="searchQuery"
                         type="text"
                         placeholder="Buscar ubicaciones..."
-                        class="w-full pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-white/40 text-sm sm:text-base"
+                        class="w-full pl-10 pr-4 py-2 bg-input border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring text-sm sm:text-base"
                         @input="handleSearch"
                     />
                     <Search
-                        class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/50"
+                        class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground"
                     />
                 </div>
             </div>
@@ -23,14 +23,14 @@
 
         <!-- Search Results -->
         <div v-if="searchResults.length > 0 || searchLoading" class="mb-4 sm:mb-6">
-            <h4 class="text-white/80 text-sm mb-2 sm:mb-3">
+            <h4 class="text-muted-foreground text-sm mb-2 sm:mb-3">
                 {{ searchLoading ? 'Buscando...' : 'Resultados de búsqueda:' }}
             </h4>
 
             <!-- Loading indicator -->
             <div v-if="searchLoading" class="flex items-center justify-center py-4">
-                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
-                <span class="ml-2 text-white/60 text-sm">Buscando ubicaciones...</span>
+                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+                <span class="ml-2 text-muted-foreground text-sm">Buscando ubicaciones...</span>
             </div>
 
             <!-- Search results -->
@@ -38,18 +38,18 @@
                 <div
                     v-for="result in searchResults"
                     :key="`${result.lat}-${result.lon}`"
-                    class="flex items-center justify-between p-2 sm:p-3 bg-white/5 hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
+                    class="flex items-center justify-between p-2 sm:p-3 bg-card/5 hover:bg-accent/50 rounded-lg transition-colors cursor-pointer"
                     @click="addLocation(result)"
                 >
                     <div class="min-w-0 flex-1">
-                        <div class="text-white font-medium text-sm sm:text-base truncate">
+                        <div class="text-card-foreground font-medium text-sm sm:text-base truncate">
                             {{ result.name }}
                         </div>
-                        <div class="text-white/60 text-xs sm:text-sm truncate">
+                        <div class="text-muted-foreground text-xs sm:text-sm truncate">
                             {{ result.region }}, {{ result.country }}
                         </div>
                     </div>
-                    <Plus class="w-4 h-4 text-white/60 flex-shrink-0 ml-2" />
+                    <Plus class="w-4 h-4 text-muted-foreground flex-shrink-0 ml-2" />
                 </div>
             </div>
         </div>
@@ -59,16 +59,16 @@
             <div
                 v-for="location in savedLocationsList"
                 :key="location.id"
-                class="group relative p-3 sm:p-4 bg-white/5 hover:bg-white/10 rounded-lg transition-all duration-200 hover:scale-[1.02]"
+                class="group relative p-3 sm:p-4 bg-card/5 hover:bg-accent/50 rounded-lg transition-all duration-200 hover:scale-[1.02]"
             >
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div class="flex items-center space-x-3 sm:space-x-4 flex-1 min-w-0">
                         <!-- Location icon with weather indicator -->
                         <div class="relative flex-shrink-0">
                             <div
-                                class="w-8 h-8 sm:w-10 sm:h-10 bg-white/10 rounded-full flex items-center justify-center"
+                                class="w-8 h-8 sm:w-10 sm:h-10 bg-muted rounded-full flex items-center justify-center"
                             >
-                                <MapPin class="w-4 h-4 sm:w-5 sm:h-5 text-white/70" />
+                                <MapPin class="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
                             </div>
                             <div
                                 v-if="location.isFavorite"
@@ -80,7 +80,7 @@
 
                         <div class="flex-1 min-w-0">
                             <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                                <div class="text-white font-medium truncate text-sm sm:text-base">
+                                <div class="text-card-foreground font-medium truncate text-sm sm:text-base">
                                     {{ location.name }}
                                 </div>
                                 <div
@@ -90,10 +90,10 @@
                                     Favorito
                                 </div>
                             </div>
-                            <div class="text-white/60 text-xs sm:text-sm truncate">
+                            <div class="text-muted-foreground text-xs sm:text-sm truncate">
                                 Ubicación guardada
                             </div>
-                            <div class="text-white/40 text-xs mt-1 flex items-center">
+                            <div class="text-muted-foreground/60 text-xs mt-1 flex items-center">
                                 <Clock class="w-3 h-3 mr-1" />
                                 {{ getCurrentTime() }}
                             </div>
@@ -106,10 +106,10 @@
                         class="hidden sm:flex items-center space-x-2 sm:space-x-3 mr-2 sm:mr-4"
                     >
                         <div class="text-center">
-                            <div class="text-white font-bold text-base sm:text-lg">
+                            <div class="text-card-foreground font-bold text-base sm:text-lg">
                                 {{ getLocationWeather(location)?.temp }}°
                             </div>
-                            <div class="text-white/60 text-xs">
+                            <div class="text-muted-foreground text-xs">
                                 {{ getLocationWeather(location)?.condition }}
                             </div>
                         </div>
@@ -130,7 +130,7 @@
                                 'p-1.5 sm:p-2 rounded-lg transition-all duration-200',
                                 location.isFavorite
                                     ? 'bg-yellow-400/20 text-yellow-400 scale-110'
-                                    : 'hover:bg-white/10 text-white/60 hover:text-yellow-400 hover:scale-110',
+                                    : 'hover:bg-accent text-muted-foreground hover:text-yellow-400 hover:scale-110',
                             ]"
                             :title="
                                 location.isFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos'
@@ -163,11 +163,11 @@
         </div>
 
         <div v-if="savedLocationsList.length === 0" class="text-center py-6 sm:py-8">
-            <MapPin class="w-10 h-10 sm:w-12 sm:h-12 text-white/40 mx-auto mb-2 sm:mb-3" />
-            <p class="text-white/60 mb-1 sm:mb-2 text-sm sm:text-base">
+            <MapPin class="w-10 h-10 sm:w-12 sm:h-12 text-muted-foreground/60 mx-auto mb-2 sm:mb-3" />
+            <p class="text-muted-foreground mb-1 sm:mb-2 text-sm sm:text-base">
                 No hay ubicaciones guardadas
             </p>
-            <p class="text-white/40 text-xs sm:text-sm">
+            <p class="text-muted-foreground/60 text-xs sm:text-sm">
                 Busca ubicaciones arriba para agregarlas a tus favoritos
             </p>
         </div>
