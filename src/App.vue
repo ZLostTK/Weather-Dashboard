@@ -382,12 +382,12 @@ const selectSavedLocation = (location: any) => {
 
 const addToSavedLocations = (result: any) => {
     const newLocation = {
-        id: Date.now().toString(),
         name: result.name,
         region: result.region,
         country: result.country,
         lat: result.lat,
         lon: result.lon,
+        isDefault: savedLocations.value.length === 0, // First location becomes default
     };
     addSavedLocation(newLocation);
 };
