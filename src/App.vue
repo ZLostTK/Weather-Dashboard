@@ -1,7 +1,7 @@
 <template>
-  <div class="min-h-screen weather-gradient">
-    <!-- Background -->
-    <div class="fixed inset-0 bg-gradient-to-br from-blue-900/20 via-purple-900/20 to-indigo-900/20"></div>
+  <div class="min-h-screen bg-background text-foreground">
+    <!-- Background gradient overlay -->
+    <div class="fixed inset-0 bg-gradient-to-br from-primary/5 via-accent/5 to-secondary/5"></div>
     
     <!-- API Key Setup -->
     <ApiKeySetup
@@ -12,15 +12,15 @@
     <!-- Main Content -->
     <div v-if="apiKey" class="relative z-10">
       <!-- Header -->
-      <header class="p-6 border-b border-white/10">
+      <header class="p-6 border-b border-border bg-card/50 backdrop-blur-sm">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
           <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-sm">
-              <Cloud class="w-6 h-6 text-white" />
+            <div class="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center backdrop-blur-sm">
+              <Cloud class="w-6 h-6 text-primary" />
             </div>
             <div>
-              <h1 class="text-2xl font-bold text-white">Weather Dashboard</h1>
-              <p class="text-white/60 text-sm">Real-time weather insights and forecasts</p>
+              <h1 class="text-2xl font-bold text-foreground">Weather Dashboard</h1>
+              <p class="text-muted-foreground text-sm">Real-time weather insights and forecasts</p>
             </div>
           </div>
           
@@ -30,20 +30,20 @@
               <select
                 v-model="currentLocation"
                 @change="handleLocationChange"
-                class="appearance-none bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white pr-8 focus:outline-none focus:border-white/40"
+                class="form-select pr-8"
               >
                 <option v-for="location in savedLocations" :key="location.id" :value="`${location.name}, ${location.region}`">
                   {{ location.name }}, {{ location.region }}
                 </option>
               </select>
-              <ChevronDown class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60 pointer-events-none" />
+              <ChevronDown class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
             </div>
 
             <!-- Refresh button -->
             <button
               @click="refreshWeather"
               :disabled="loading"
-              class="p-2 bg-white/10 hover:bg-white/20 rounded-lg text-white transition-colors disabled:opacity-50"
+              class="btn-ghost p-2 disabled:opacity-50"
             >
               <RefreshCw :class="['w-5 h-5', { 'animate-spin': loading }]" />
             </button>
@@ -51,7 +51,7 @@
             <!-- Settings -->
             <button
               @click="showSettings = true"
-              class="p-2 bg-white/10 hover:bg-white/20 rounded-lg text-white transition-colors"
+              class="btn-ghost p-2"
             >
               <Settings class="w-5 h-5" />
             </button>
@@ -61,7 +61,7 @@
 
       <!-- Main Dashboard -->
       <main class="max-w-7xl mx-auto p-6">
-        <div v-if="error" class="mb-6 p-4 bg-red-500/20 border border-red-500/40 rounded-lg text-red-200">
+        <div v-if="error" class="mb-6 p-4 bg-destructive/20 border border-destructive/40 rounded-lg text-destructive-foreground">
           <div class="flex items-center space-x-2">
             <AlertCircle class="w-5 h-5" />
             <span>{{ error }}</span>
@@ -75,8 +75,13 @@
           </div>
           
           <div class="lg:col-span-2">
-            <ForecastChart :forecast="forecast" />
+            <ForecastChart :forecast="forecast" :loading="loading" />
           </div>
+        </div>
+
+        <!-- Weather Analytics Charts -->
+        <div class="mb-8">
+          <WeatherCharts :forecast="forecast" />
         </div>
 
         <!-- Weather Map and Daily Forecast -->
@@ -107,43 +112,57 @@
       <!-- Settings Modal -->
       <div
         v-if="showSettings"
-        class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
+        class="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50"
         @click.self="showSettings = false"
       >
-        <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 w-full max-w-md mx-4 border border-white/20">
+        <div class="bg-card backdrop-blur-md rounded-xl p-6 w-full max-w-md mx-4 border border-border shadow-lg">
           <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-semibold text-white">Settings</h3>
+            <h3 class="text-lg font-semibold text-card-foreground">Settings</h3>
             <button
               @click="showSettings = false"
-              class="p-1 hover:bg-white/10 rounded transition-colors"
+              class="btn-ghost p-1"
             >
-              <X class="w-5 h-5 text-white" />
+              <X class="w-5 h-5" />
             </button>
           </div>
 
           <div class="space-y-4">
             <div>
-              <label class="block text-white/80 text-sm mb-2">WeatherAPI Key</label>
+              <label class="block text-card-foreground text-sm mb-2">WeatherAPI Key</label>
               <div class="flex space-x-2">
                 <input
                   v-model="newApiKey"
                   type="text"
-                  class="flex-1 px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-white/40"
+                  class="form-input flex-1"
                   placeholder="Enter new API key"
                 />
                 <button
                   @click="updateApiKey"
-                  class="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg text-white transition-colors"
+                  class="btn-primary"
                 >
                   Update
                 </button>
               </div>
             </div>
 
-            <div class="pt-4 border-t border-white/10">
+            <!-- Theme Selector -->
+            <div>
+              <label class="block text-card-foreground text-sm mb-2">Tema de la aplicación</label>
+              <select
+                v-model="selectedTheme"
+                @change="handleThemeChange"
+                class="form-select w-full"
+              >
+                <option value="LIGHT">Claro</option>
+                <option value="DARK">Oscuro</option>
+                <option value="AUTO">Automático</option>
+              </select>
+            </div>
+
+            <div class="pt-4 border-t border-border">
               <button
                 @click="resetToDemo"
-                class="w-full py-2 px-4 bg-gray-500/20 hover:bg-gray-500/30 rounded-lg text-white transition-colors"
+                class="btn-secondary w-full"
               >
                 Switch to Demo Mode
               </button>
@@ -161,15 +180,15 @@ import {
   Cloud, ChevronDown, RefreshCw, Settings, X, AlertCircle
 } from 'lucide-vue-next';
 
-import WeatherCard from '@/components/WeatherCard.vue';
-import ForecastChart from '@/components/ForecastChart.vue';
-import WeatherMap from '@/components/WeatherMap.vue';
-import DailyForecast from '@/components/DailyForecast.vue';
-import WeatherAlerts from '@/components/WeatherAlerts.vue';
-import LocationManager from '@/components/LocationManager.vue';
-import ApiKeySetup from '@/components/ApiKeySetup.vue';
+import { WeatherCard, ForecastChart, DailyForecast } from '@/features/weather';
+import { WeatherCharts } from '@/features/charts';
+import { WeatherMap } from '@/features/maps';
+import { WeatherAlerts } from '@/features/alerts';
+import { LocationManager } from '@/features/locations';
+import { ApiKeySetup } from '@/features/dashboard';
 
-import { useWeather } from '@/composables/useWeather';
+import { useWeather } from '@/shared/composables/useWeather';
+import { useAppStore } from '@/shared/stores/useAppStore';
 
 const {
   currentWeather,
@@ -193,6 +212,10 @@ const {
 
 const showSettings = ref(false);
 const newApiKey = ref('');
+
+// Theme management
+const appStore = useAppStore();
+const selectedTheme = ref(appStore.theme);
 
 const handleLocationChange = () => {
   refreshWeather();
@@ -225,8 +248,15 @@ const resetToDemo = () => {
   refreshWeather();
 };
 
+const handleThemeChange = () => {
+  appStore.setTheme(selectedTheme.value);
+};
+
 // Initialize app
 onMounted(async () => {
+  // Initialize app store and theme
+  appStore.initialize();
+  
   if (apiKey.value) {
     await refreshWeather();
   }
