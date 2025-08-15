@@ -192,8 +192,7 @@
 import { ref, reactive } from 'vue';
 import {
   Bell, Plus, X, Trash2,
-  Thermometer, CloudRain, Wind, Sun, AlertTriangle,
-  BellRing, BellOff
+  Thermometer, CloudRain, Wind, Sun, AlertTriangle
 } from 'lucide-vue-next';
 import type { WeatherAlert } from '@/shared/types/weather';
 
@@ -201,7 +200,7 @@ interface Props {
   alerts: WeatherAlert[];
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 const emit = defineEmits<{
   addAlert: [alert: Omit<WeatherAlert, 'id' | 'createdAt'>];

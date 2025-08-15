@@ -1,6 +1,6 @@
 import { ref, computed, reactive } from 'vue';
 import { defineStore } from 'pinia';
-import type { WeatherData, ForecastData, WeatherAlert, SavedLocation } from '@/shared/types/weather';
+import type { SavedLocation } from '@/shared/types/weather';
 import { APP_CONFIG, THEMES } from '@/shared/constants';
 import { getSystemTheme, applyTheme } from '@/shared/constants/themes';
 

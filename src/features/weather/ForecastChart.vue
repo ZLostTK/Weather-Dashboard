@@ -108,38 +108,52 @@ const generateFallbackData = () => {
   }
 };
 
-const createChart = () => {
-  if (!chartRef.value) {
-    console.warn('❌ No chartRef available');
-    return;
-  }
-  
-  if (props.loading) {
+const createChart = async () => {
+  // Early validation
+  if (!chartRef.value || props.loading) {
     return;
   }
 
-  // Destroy existing chart
+  // Wait for DOM to be fully ready
+  await nextTick();
+
+  // Check if canvas is still available and connected to DOM
+  if (!chartRef.value || !chartRef.value.isConnected) {
+    console.warn('❌ Canvas not available or not in DOM');
+    return;
+  }
+
+  // Destroy existing chart with better error handling
   if (chart.value) {
     try {
       chart.value.destroy();
-      chart.value = null;
     } catch (error) {
-      console.warn('Error destroying chart:', error);
+      console.warn('Error destroying existing chart:', error);
+    } finally {
       chart.value = null;
     }
   }
 
-  // Also try to clear any existing Chart.js instances on this canvas
-  if (chartRef.value) {
+  // Clear any lingering Chart.js instances
+  try {
     const existingChart = ChartJS.getChart(chartRef.value);
     if (existingChart) {
       existingChart.destroy();
     }
+  } catch (error) {
+    console.warn('Error destroying lingering chart:', error);
   }
 
-  const ctx = chartRef.value.getContext('2d');
-  if (!ctx) {
-    console.warn('❌ Could not get 2d context');
+  // Get context with validation
+  let ctx;
+  try {
+    ctx = chartRef.value.getContext('2d');
+    if (!ctx) {
+      console.error('❌ Could not get 2D context');
+      return;
+    }
+  } catch (error) {
+    console.error('❌ Error getting canvas context:', error);
     return;
   }
 
@@ -313,26 +327,45 @@ const createChart = () => {
 
 onMounted(() => {
   setTimeout(() => {
-    createChart();
-  }, 100);
+    debouncedCreateChart();
+  }, 200);
 });
 
+// Debounced chart creation to prevent multiple rapid calls
+let chartTimeout: NodeJS.Timeout | null = null;
+
+const debouncedCreateChart = () => {
+  if (chartTimeout) {
+    clearTimeout(chartTimeout);
+  }
+  chartTimeout = setTimeout(() => {
+    createChart();
+  }, 100);
+};
+
 watch(selectedPeriod, () => {
-  createChart();
+  debouncedCreateChart();
 });
 
 watch(() => props.forecast, () => {
-  createChart();
+  debouncedCreateChart();
 });
 
 watch(() => props.loading, (newLoading) => {
   if (!newLoading) {
-    createChart();
+    debouncedCreateChart();
   }
 });
 
 // Cleanup on unmount
 onUnmounted(() => {
+  // Clear any pending timeout
+  if (chartTimeout) {
+    clearTimeout(chartTimeout);
+    chartTimeout = null;
+  }
+  
+  // Destroy chart
   if (chart.value) {
     try {
       chart.value.destroy();
