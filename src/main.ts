@@ -16,9 +16,9 @@ appStore.initialize();
 
 // Global error handler
 app.config.errorHandler = (error, instance, info) => {
-  console.error('Global error:', error, info);
-  const message = error instanceof Error ? error.message : String(error);
-  appStore.setError(`Unexpected error: ${message}`);
+    console.error('Global error:', error, info);
+    const message = error instanceof Error ? error.message : String(error);
+    appStore.setError(`Unexpected error: ${message}`);
 };
 
 // Mount app

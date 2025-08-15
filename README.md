@@ -7,6 +7,7 @@ Un dashboard meteorológico moderno, interactivo y completo construido con Vue 3
 ## ✨ Características Principales
 
 ### 🎯 Funcionalidades Core
+
 - **🌡️ Información Meteorológica en Tiempo Real** - Datos actuales de temperatura, humedad, viento y más
 - **📊 Pronósticos Detallados** - Pronósticos horarios y de 7 días con detalles completos
 - **🗺️ Mapas Meteorológicos Interactivos** - Visualización de temperatura, precipitación, nubes y viento
@@ -15,6 +16,7 @@ Un dashboard meteorológico moderno, interactivo y completo construido con Vue 3
 - **📍 Gestión de Ubicaciones** - Guardar y gestionar múltiples ubicaciones favoritas
 
 ### 🎨 Diseño y UX
+
 - **🌟 Interfaz Moderna** - Diseño glass-morphism con gradientes y efectos visuales
 - **📱 Totalmente Responsive** - Optimizado para desktop, tablet y móvil
 - **⚡ Animaciones Fluidas** - Transiciones y micro-interacciones elegantes
@@ -22,6 +24,7 @@ Un dashboard meteorológico moderno, interactivo y completo construido con Vue 3
 - **♿ Accesibilidad** - Cumple con estándares WCAG para inclusividad
 
 ### 🛠️ Tecnologías Avanzadas
+
 - **Vue 3** con Composition API
 - **TypeScript** para type safety
 - **Tailwind CSS** para estilos
@@ -33,6 +36,7 @@ Un dashboard meteorológico moderno, interactivo y completo construido con Vue 3
 ## 🚀 Inicio Rápido
 
 ### Prerrequisitos
+
 - Node.js 18+ o superior
 - npm o pnpm
 - API Key de [WeatherAPI](https://www.weatherapi.com/) (opcional para demo)
@@ -111,42 +115,54 @@ src/
 ## 🎨 Componentes Principales
 
 ### WeatherCard
+
 Muestra información meteorológica actual con:
+
 - Temperatura actual y sensación térmica
 - Condiciones climáticas con iconos animados
 - Métricas detalladas (humedad, viento, presión, UV)
 - Indicadores visuales dinámicos
 
 ### WeatherCharts
+
 Análisis visual avanzado con:
+
 - Gráficos de temperatura y tendencias
 - Análisis de precipitación y humedad
 - Comparativas y métricas múltiples
 - Visualizaciones interactivas
 
 ### WeatherMap
+
 Mapa interactivo que incluye:
+
 - Capas de temperatura, precipitación, nubes y viento
 - Marcadores de ubicaciones con datos en tiempo real
 - Controles de zoom y navegación
 - Leyendas explicativas
 
 ### DailyForecast
+
 Pronóstico extendido con:
+
 - Vista de 7 días con detalles expandibles
 - Pronósticos horarios
 - Datos astronómicos (amanecer, atardecer, fases lunares)
 - Métricas detalladas por día
 
 ### WeatherAlerts
+
 Sistema de notificaciones que permite:
+
 - Crear alertas personalizadas por temperatura, lluvia, viento, UV
 - Configurar umbrales y condiciones
 - Activar/desactivar alertas individualmente
 - Gestión completa de notificaciones
 
 ### LocationManager
+
 Gestión avanzada de ubicaciones:
+
 - Búsqueda inteligente de ciudades
 - Guardar ubicaciones favoritas
 - Vista previa del clima por ubicación
@@ -167,15 +183,24 @@ VITE_MAP_API_KEY=tu_map_api_key_aqui
 Los temas se adaptan automáticamente a las condiciones meteorológicas:
 
 ```css
-.weather-sunny { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
-.weather-cloudy { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-.weather-rainy { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
-.weather-snowy { background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%); }
+.weather-sunny {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+.weather-cloudy {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+.weather-rainy {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+.weather-snowy {
+    background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+}
 ```
 
 ## 🚀 Despliegue
 
 ### Vercel (Recomendado)
+
 ```bash
 # Instalar Vercel CLI
 npm i -g vercel
@@ -185,6 +210,7 @@ vercel --prod
 ```
 
 ### Netlify
+
 ```bash
 # Build local
 pnpm build
@@ -194,6 +220,7 @@ pnpm build
 ```
 
 ### Docker
+
 ```dockerfile
 FROM node:18-alpine
 WORKDIR /app
@@ -224,6 +251,7 @@ pnpm test:ui
 ```
 
 ### Estructura de Tests
+
 - **Unit Tests**: Componentes individuales y funciones
 - **Integration Tests**: Interacciones entre componentes
 - **E2E Tests**: Flujos completos de usuario (con Playwright)
@@ -248,6 +276,7 @@ Configuración automática con GitHub Actions:
 5. Abrir un Pull Request
 
 ### Estándares de Código
+
 - Usar **Conventional Commits**: `feat:`, `fix:`, `docs:`, `style:`, `refactor:`, `test:`, `chore:`
 - Mantener **cobertura de tests** > 85%
 - Seguir las reglas de **ESLint** y **Prettier**

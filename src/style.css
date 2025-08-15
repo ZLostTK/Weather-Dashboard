@@ -3,237 +3,237 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    /* Tema claro - mejorado para accesibilidad */
-    --background: 0 0% 98%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
-    --radius: 0.75rem;
-    
-    /* Colores de estado mejorados */
-    --success: 142 76% 36%;
-    --success-foreground: 355 7% 97%;
-    --warning: 32 95% 44%;
-    --warning-foreground: 355 7% 97%;
-    --info: 199 89% 48%;
-    --info-foreground: 355 7% 97%;
-  }
+    :root {
+        /* Tema claro - mejorado para accesibilidad */
+        --background: 0 0% 98%;
+        --foreground: 240 10% 3.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 240 10% 3.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 240 10% 3.9%;
+        --primary: 221.2 83.2% 53.3%;
+        --primary-foreground: 210 40% 98%;
+        --secondary: 210 40% 96%;
+        --secondary-foreground: 240 5.9% 10%;
+        --muted: 210 40% 96%;
+        --muted-foreground: 215.4 16.3% 46.9%;
+        --accent: 210 40% 96%;
+        --accent-foreground: 240 5.9% 10%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 214.3 31.8% 91.4%;
+        --input: 214.3 31.8% 91.4%;
+        --ring: 221.2 83.2% 53.3%;
+        --radius: 0.75rem;
 
-  .dark {
-    /* Tema oscuro - optimizado para accesibilidad WCAG AA */
-    --background: 224 71% 4%;
-    --foreground: 213 31% 91%;
-    --card: 224 71% 4%;
-    --card-foreground: 213 31% 91%;
-    --popover: 224 71% 4%;
-    --popover-foreground: 213 31% 91%;
-    --primary: 210 40% 70%;
-    --primary-foreground: 224 71% 4%;
-    --secondary: 215 27.9% 16.9%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 215 27.9% 16.9%;
-    --muted-foreground: 217.9 10.6% 64.9%;
-    --accent: 215 27.9% 16.9%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 215 27.9% 16.9%;
-    --input: 215 27.9% 16.9%;
-    --ring: 216 34% 17%;
-    
-    /* Colores de estado mejorados para tema oscuro */
-    --success: 142 76% 50%;
-    --success-foreground: 224 71% 4%;
-    --warning: 32 95% 60%;
-    --warning-foreground: 224 71% 4%;
-    --info: 199 89% 60%;
-    --info-foreground: 224 71% 4%;
-  }
+        /* Colores de estado mejorados */
+        --success: 142 76% 36%;
+        --success-foreground: 355 7% 97%;
+        --warning: 32 95% 44%;
+        --warning-foreground: 355 7% 97%;
+        --info: 199 89% 48%;
+        --info-foreground: 355 7% 97%;
+    }
+
+    .dark {
+        /* Tema oscuro - optimizado para accesibilidad WCAG AA */
+        --background: 224 71% 4%;
+        --foreground: 213 31% 91%;
+        --card: 224 71% 4%;
+        --card-foreground: 213 31% 91%;
+        --popover: 224 71% 4%;
+        --popover-foreground: 213 31% 91%;
+        --primary: 210 40% 70%;
+        --primary-foreground: 224 71% 4%;
+        --secondary: 215 27.9% 16.9%;
+        --secondary-foreground: 210 40% 98%;
+        --muted: 215 27.9% 16.9%;
+        --muted-foreground: 217.9 10.6% 64.9%;
+        --accent: 215 27.9% 16.9%;
+        --accent-foreground: 210 40% 98%;
+        --destructive: 0 72% 51%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 215 27.9% 16.9%;
+        --input: 215 27.9% 16.9%;
+        --ring: 216 34% 17%;
+
+        /* Colores de estado mejorados para tema oscuro */
+        --success: 142 76% 50%;
+        --success-foreground: 224 71% 4%;
+        --warning: 32 95% 60%;
+        --warning-foreground: 224 71% 4%;
+        --info: 199 89% 60%;
+        --info-foreground: 224 71% 4%;
+    }
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground font-sans antialiased;
-    min-height: 100vh;
-  }
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-background text-foreground font-sans antialiased;
+        min-height: 100vh;
+    }
 }
 
 .glass-card {
-  background: hsl(var(--card) / 0.8);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  border: 1px solid hsl(var(--border));
-  box-shadow: 0 8px 32px 0 hsl(var(--muted) / 0.3);
-  color: hsl(var(--card-foreground));
+    background: hsl(var(--card) / 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    border: 1px solid hsl(var(--border));
+    box-shadow: 0 8px 32px 0 hsl(var(--muted) / 0.3);
+    color: hsl(var(--card-foreground));
 }
 
 .weather-gradient {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 /* Enhanced styles for weather dashboard */
 .card-hover {
-  @apply transition-all duration-300 hover:scale-105 hover:shadow-xl;
+    @apply transition-all duration-300 hover:scale-105 hover:shadow-xl;
 }
 
 .text-shadow {
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* Chart container styles */
 .chart-container {
-  position: relative;
-  height: 300px;
-  width: 100%;
+    position: relative;
+    height: 300px;
+    width: 100%;
 }
 
 /* Map container styles */
 .map-container {
-  height: 400px;
-  width: 100%;
-  border-radius: 0.75rem;
-  overflow: hidden;
+    height: 400px;
+    width: 100%;
+    border-radius: 0.75rem;
+    overflow: hidden;
 }
 
 /* Leaflet map overrides - Tema adaptable */
 .leaflet-container {
-  font-family: inherit;
-  border-radius: 0.75rem;
+    font-family: inherit;
+    border-radius: 0.75rem;
 }
 
 .leaflet-popup-content-wrapper {
-  background: hsl(var(--card) / 0.95);
-  backdrop-filter: blur(10px);
-  border-radius: 8px;
-  color: hsl(var(--card-foreground));
-  border: 1px solid hsl(var(--border));
+    background: hsl(var(--card) / 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    color: hsl(var(--card-foreground));
+    border: 1px solid hsl(var(--border));
 }
 
 .leaflet-popup-tip {
-  background: hsl(var(--card) / 0.95);
+    background: hsl(var(--card) / 0.95);
 }
 
 .dark .leaflet-popup-content-wrapper {
-  box-shadow: 0 8px 32px 0 hsl(var(--background) / 0.5);
+    box-shadow: 0 8px 32px 0 hsl(var(--background) / 0.5);
 }
 
 /* Custom scrollbar - Accesible */
 ::-webkit-scrollbar {
-  width: 6px;
+    width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: hsl(var(--muted));
+    background: hsl(var(--muted));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted-foreground) / 0.5);
-  border-radius: 3px;
+    background: hsl(var(--muted-foreground) / 0.5);
+    border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground) / 0.7);
+    background: hsl(var(--muted-foreground) / 0.7);
 }
 
 /* Loading animations */
 @keyframes shimmer {
-  0% {
-    background-position: -468px 0;
-  }
-  100% {
-    background-position: 468px 0;
-  }
+    0% {
+        background-position: -468px 0;
+    }
+    100% {
+        background-position: 468px 0;
+    }
 }
 
 .shimmer {
-  animation: shimmer 1.5s ease-in-out infinite;
-  background: linear-gradient(
-    90deg,
-    hsl(var(--muted)) 25%,
-    hsl(var(--muted-foreground) / 0.3) 50%,
-    hsl(var(--muted)) 75%
-  );
-  background-size: 1000px 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+    background: linear-gradient(
+        90deg,
+        hsl(var(--muted)) 25%,
+        hsl(var(--muted-foreground) / 0.3) 50%,
+        hsl(var(--muted)) 75%
+    );
+    background-size: 1000px 100%;
 }
 
 /* Weather condition specific styles */
 .weather-sunny {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
 }
 
 .weather-cloudy {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .weather-rainy {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
 }
 
 .weather-snowy {
-  background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+    background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
 }
 
 /* Modal and overlay z-index hierarchy */
 .modal-overlay {
-  z-index: 9999 !important;
+    z-index: 9999 !important;
 }
 
 .settings-modal-overlay {
-  z-index: 9998 !important;
+    z-index: 9998 !important;
 }
 
 /* Enhanced button styles - Accesibles */
 .btn-primary {
-  @apply bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+    @apply bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
 }
 
 .btn-secondary {
-  @apply bg-secondary hover:bg-secondary/80 text-secondary-foreground font-medium py-2 px-4 rounded-lg transition-colors duration-200 border border-border focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+    @apply bg-secondary hover:bg-secondary/80 text-secondary-foreground font-medium py-2 px-4 rounded-lg transition-colors duration-200 border border-border focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
 }
 
 .btn-ghost {
-  @apply hover:bg-accent text-foreground font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+    @apply hover:bg-accent text-foreground font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
 }
 
 .btn-destructive {
-  @apply bg-destructive hover:bg-destructive/90 text-destructive-foreground font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+    @apply bg-destructive hover:bg-destructive/90 text-destructive-foreground font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
 }
 
 .btn-success {
-  @apply bg-success hover:bg-success/90 text-success-foreground font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+    @apply bg-success hover:bg-success/90 text-success-foreground font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
 }
 
 /* Form elements - Accesibles */
 .form-input {
-  @apply bg-input border border-border rounded-lg px-3 py-2 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-all duration-200;
+    @apply bg-input border border-border rounded-lg px-3 py-2 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-all duration-200;
 }
 
 .form-select {
-  @apply appearance-none bg-input border border-border rounded-lg px-3 py-2 text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-all duration-200;
+    @apply appearance-none bg-input border border-border rounded-lg px-3 py-2 text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-all duration-200;
 }
