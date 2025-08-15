@@ -96,9 +96,11 @@ import {
     Filler,
     RadialLinearScale,
     ArcElement,
+    type ChartOptions,
 } from 'chart.js';
 import { TrendingUp, BarChart3, PieChart, Activity } from 'lucide-vue-next';
 import type { ForecastData } from '@/shared/types/weather';
+import { getChartColors } from '@/shared/utils/chartTheme';
 
 ChartJS.register(
     CategoryScale,
@@ -238,7 +240,25 @@ const createMainChart = async () => {
         new Date(day.date).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric' })
     );
 
-    let datasets: any[] = [];
+    // Get theme-aware colors
+    const colors = getChartColors();
+
+    let datasets: Array<{
+        label: string;
+        data: number[];
+        borderColor?: string;
+        backgroundColor?: string;
+        fill?: boolean;
+        tension?: number;
+        type?: 'line' | 'bar';
+        yAxisID?: string;
+        borderWidth?: number;
+        pointBackgroundColor?: string;
+        pointBorderColor?: string;
+        pointRadius?: number;
+        pointHoverRadius?: number;
+        pointBorderWidth?: number;
+    }> = [];
 
     switch (activeChart.value) {
         case 'temperature':
@@ -246,18 +266,28 @@ const createMainChart = async () => {
                 {
                     label: 'Max Temperature',
                     data: days.map(day => day.day.maxtemp_c),
-                    borderColor: '#ff6b6b',
-                    backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                    borderColor: colors.destructive,
+                    backgroundColor: colors.destructiveBg,
                     fill: true,
                     tension: 0.4,
+                    pointBackgroundColor: colors.card,
+                    pointBorderColor: colors.destructive,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    pointBorderWidth: 2,
                 },
                 {
                     label: 'Min Temperature',
                     data: days.map(day => day.day.mintemp_c),
-                    borderColor: '#4ecdc4',
-                    backgroundColor: 'rgba(78, 205, 196, 0.1)',
+                    borderColor: colors.primary,
+                    backgroundColor: colors.primaryBg,
                     fill: true,
                     tension: 0.4,
+                    pointBackgroundColor: colors.card,
+                    pointBorderColor: colors.primary,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    pointBorderWidth: 2,
                 },
             ];
             break;
@@ -267,18 +297,23 @@ const createMainChart = async () => {
                 {
                     label: 'Precipitation (mm)',
                     data: days.map(day => day.day.totalprecip_mm),
-                    backgroundColor: '#74add1',
-                    borderColor: '#4575b4',
+                    backgroundColor: colors.primary,
+                    borderColor: colors.primary,
                     borderWidth: 1,
                 },
                 {
                     label: 'Rain Chance (%)',
                     data: days.map(day => day.day.daily_chance_of_rain),
                     type: 'line',
-                    borderColor: '#f46d43',
+                    borderColor: colors.warning,
                     backgroundColor: 'transparent',
                     yAxisID: 'y1',
                     tension: 0.4,
+                    pointBackgroundColor: colors.card,
+                    pointBorderColor: colors.warning,
+                    pointRadius: 3,
+                    pointHoverRadius: 5,
+                    pointBorderWidth: 2,
                 },
             ];
             break;
@@ -288,8 +323,8 @@ const createMainChart = async () => {
                 {
                     label: 'Max Wind Speed (km/h)',
                     data: days.map(day => day.day.maxwind_kph),
-                    backgroundColor: '#a8dadc',
-                    borderColor: '#457b9d',
+                    backgroundColor: colors.accent,
+                    borderColor: colors.accent,
                     borderWidth: 1,
                 },
             ];
@@ -300,25 +335,40 @@ const createMainChart = async () => {
                 {
                     label: 'Temperature',
                     data: days.map(day => day.day.avgtemp_c),
-                    borderColor: '#ff6b6b',
+                    borderColor: colors.destructive,
                     backgroundColor: 'transparent',
                     tension: 0.4,
+                    pointBackgroundColor: colors.card,
+                    pointBorderColor: colors.destructive,
+                    pointRadius: 3,
+                    pointHoverRadius: 5,
+                    pointBorderWidth: 2,
                 },
                 {
                     label: 'Humidity',
                     data: days.map(day => day.day.avghumidity),
-                    borderColor: '#4ecdc4',
+                    borderColor: colors.primary,
                     backgroundColor: 'transparent',
                     tension: 0.4,
                     yAxisID: 'y1',
+                    pointBackgroundColor: colors.card,
+                    pointBorderColor: colors.primary,
+                    pointRadius: 3,
+                    pointHoverRadius: 5,
+                    pointBorderWidth: 2,
                 },
                 {
                     label: 'UV Index',
                     data: days.map(day => day.day.uv),
-                    borderColor: '#ffe66d',
+                    borderColor: colors.warning,
                     backgroundColor: 'transparent',
                     tension: 0.4,
                     yAxisID: 'y2',
+                    pointBackgroundColor: colors.card,
+                    pointBorderColor: colors.warning,
+                    pointRadius: 3,
+                    pointHoverRadius: 5,
+                    pointBorderWidth: 2,
                 },
             ];
             break;
@@ -326,19 +376,41 @@ const createMainChart = async () => {
 
     const scales: any = {
         x: {
-            grid: { color: 'hsl(var(--border))' },
-            ticks: { color: 'hsl(var(--muted-foreground))' },
+            grid: { 
+                color: colors.grid,
+                display: true,
+            },
+            ticks: { 
+                color: colors.text,
+                font: {
+                    size: 11,
+                    weight: 'normal' as const,
+                },
+            },
+            border: {
+                display: false,
+            },
         },
         y: {
-            grid: { color: 'hsl(var(--border))' },
+            grid: { 
+                color: colors.grid,
+                display: true,
+            },
             ticks: {
-                color: 'hsl(var(--muted-foreground))',
-                callback: function (value: any): string {
+                color: colors.text,
+                font: {
+                    size: 11,
+                    weight: 'normal' as const,
+                },
+                callback: function (value: string | number): string {
                     if (activeChart.value === 'precipitation') {
                         return value + ' mm';
                     }
                     return value + (activeChart.value === 'wind' ? ' km/h' : '°C');
                 },
+            },
+            border: {
+                display: false,
             },
         },
     };
@@ -350,10 +422,17 @@ const createMainChart = async () => {
             position: 'right',
             grid: { drawOnChartArea: false },
             ticks: {
-                color: 'hsl(var(--muted-foreground))',
-                callback: function (value: any) {
+                color: colors.text,
+                font: {
+                    size: 11,
+                    weight: 'normal' as const,
+                },
+                callback: function (value: string | number) {
                     return value + '%';
                 },
+            },
+            border: {
+                display: false,
             },
         };
     }
@@ -365,10 +444,17 @@ const createMainChart = async () => {
             position: 'right',
             grid: { drawOnChartArea: false },
             ticks: {
-                color: 'hsl(var(--muted-foreground))',
-                callback: function (value: any) {
+                color: colors.text,
+                font: {
+                    size: 11,
+                    weight: 'normal' as const,
+                },
+                callback: function (value: string | number) {
                     return value + '%';
                 },
+            },
+            border: {
+                display: false,
             },
         };
         scales.y2 = {
@@ -399,18 +485,28 @@ const createMainChart = async () => {
                 },
                 plugins: {
                     legend: {
-                        labels: { color: 'hsl(var(--foreground))' },
+                        labels: { 
+                            color: colors.text,
+                            font: {
+                                size: 12,
+                                weight: 'bold' as const,
+                            },
+                            usePointStyle: true,
+                            padding: 20,
+                        },
                     },
                     tooltip: {
-                        backgroundColor: 'hsl(var(--popover))',
-                        titleColor: 'hsl(var(--popover-foreground))',
-                        bodyColor: 'hsl(var(--popover-foreground))',
-                        borderColor: 'hsl(var(--border))',
+                        backgroundColor: colors.card,
+                        titleColor: colors.text,
+                        bodyColor: colors.mutedText,
+                        borderColor: colors.border,
                         borderWidth: 1,
+                        cornerRadius: 8,
+                        displayColors: true,
                     },
                 },
-                scales,
-            },
+                scales: scales,
+            } as ChartOptions<'line' | 'bar'>,
         });
 
         console.log('✅ WeatherCharts: Main chart created successfully');
@@ -462,6 +558,9 @@ const createHumidityChart = async () => {
         new Date(day.date).toLocaleDateString('es-ES', { weekday: 'short' })
     );
 
+    // Get theme-aware colors
+    const colors = getChartColors();
+
     humidityChart.value = new ChartJS(ctx, {
         type: 'line',
         data: {
@@ -470,18 +569,28 @@ const createHumidityChart = async () => {
                 {
                     label: 'Humidity',
                     data: days.map(day => day.day.avghumidity),
-                    borderColor: '#4ecdc4',
-                    backgroundColor: 'rgba(78, 205, 196, 0.1)',
+                    borderColor: colors.primary,
+                    backgroundColor: colors.primaryBg,
                     fill: true,
                     tension: 0.4,
+                    pointBackgroundColor: colors.card,
+                    pointBorderColor: colors.primary,
+                    pointRadius: 2,
+                    pointHoverRadius: 4,
+                    pointBorderWidth: 1,
                 },
                 {
                     label: 'Pressure',
                     data: days.map(() => Math.floor(Math.random() * 20) + 1010), // Mock pressure data
-                    borderColor: '#ff6b6b',
+                    borderColor: colors.destructive,
                     backgroundColor: 'transparent',
                     yAxisID: 'y1',
                     tension: 0.4,
+                    pointBackgroundColor: colors.card,
+                    pointBorderColor: colors.destructive,
+                    pointRadius: 2,
+                    pointHoverRadius: 4,
+                    pointBorderWidth: 1,
                 },
             ],
         },
@@ -494,19 +603,6 @@ const createHumidityChart = async () => {
             plugins: {
                 legend: {
                     display: false,
-                },
-            },
-            scales: {
-                x: {
-                    display: false,
-                },
-                y: {
-                    display: false,
-                },
-                y1: {
-                    display: false,
-                    type: 'linear',
-                    position: 'right',
                 },
             },
         },
@@ -551,6 +647,9 @@ const createWindChart = async () => {
         return;
     }
 
+    // Get theme-aware colors
+    const colors = getChartColors();
+
     // Note: Wind pattern analysis could use forecast data in future
 
     windChart.value = new ChartJS(ctx, {
@@ -561,14 +660,14 @@ const createWindChart = async () => {
                 {
                     data: [12, 8, 15, 10, 20, 18, 12, 5], // Mock wind direction data
                     backgroundColor: [
-                        '#ff6b6b',
-                        '#ff8e53',
-                        '#ff6b6b',
-                        '#4ecdc4',
-                        '#45b7d1',
-                        '#96ceb4',
-                        '#ffeaa7',
-                        '#dda0dd',
+                        colors.destructive,
+                        colors.warning,
+                        colors.destructive,
+                        colors.primary,
+                        colors.info,
+                        colors.success,
+                        colors.warning,
+                        colors.violet,
                     ],
                     borderWidth: 0,
                 },

@@ -57,6 +57,7 @@ import {
     Filler,
 } from 'chart.js';
 import type { ForecastData } from '@/shared/types/weather';
+import { getChartColors } from '@/shared/utils/chartTheme';
 
 // Register Chart.js components
 ChartJS.register(
@@ -254,12 +255,8 @@ const createChart = async () => {
         feelsLike = fallbackData.feelsLike;
     }
 
-    // Use simpler static colors for debugging
-    const primaryColor = '#60a5fa'; // blue-400
-    const secondaryColor = '#a78bfa'; // violet-400
-    const foregroundColor = '#f8fafc'; // slate-50
-    const mutedForegroundColor = '#94a3b8'; // slate-400
-    const borderColor = '#475569'; // slate-600
+    // Get theme-aware colors
+    const colors = getChartColors();
 
     try {
         // Final validation before creating chart
@@ -276,12 +273,12 @@ const createChart = async () => {
                     {
                         label: 'Temperatura',
                         data: temperatures,
-                        borderColor: primaryColor,
-                        backgroundColor: 'rgba(96, 165, 250, 0.1)',
+                        borderColor: colors.primary,
+                        backgroundColor: colors.primaryBg,
                         fill: true,
                         tension: 0.4,
-                        pointBackgroundColor: primaryColor,
-                        pointBorderColor: primaryColor,
+                        pointBackgroundColor: colors.card,
+                        pointBorderColor: colors.primary,
                         pointRadius: 4,
                         pointHoverRadius: 6,
                         pointBorderWidth: 2,
@@ -292,12 +289,12 @@ const createChart = async () => {
                                 ? 'Sensación Térmica'
                                 : 'Promedio Real',
                         data: feelsLike,
-                        borderColor: secondaryColor,
-                        backgroundColor: 'transparent',
+                        borderColor: colors.secondary,
+                        backgroundColor: colors.secondaryBg,
                         borderDash: selectedPeriod.value === 'hourly' ? [5, 5] : [],
                         tension: 0.4,
-                        pointBackgroundColor: secondaryColor,
-                        pointBorderColor: secondaryColor,
+                        pointBackgroundColor: colors.card,
+                        pointBorderColor: colors.secondary,
                         pointRadius: 3,
                         pointHoverRadius: 5,
                         pointBorderWidth: 2,
@@ -315,23 +312,26 @@ const createChart = async () => {
                         display: true,
                         position: 'top',
                         labels: {
-                            color: foregroundColor,
+                            color: colors.foreground,
                             usePointStyle: true,
                             padding: 20,
                             font: {
                                 size: 12,
+                                weight: 'bold',
                             },
                         },
                     },
                     tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        titleColor: '#ffffff',
-                        bodyColor: '#ffffff',
-                        borderColor: borderColor,
+                        backgroundColor: colors.popoverBackground,
+                        titleColor: colors.popoverForeground,
+                        bodyColor: colors.popoverForeground,
+                        borderColor: colors.border,
                         borderWidth: 1,
+                        cornerRadius: 8,
+                        displayColors: true,
                         callbacks: {
                             label: function (context: any) {
-                                return `${context.dataset.label}: ${context.parsed.y}°C`;
+                                return `${context.dataset.label || 'Data'}: ${context.parsed.y}°C`;
                             },
                         },
                     },
@@ -339,26 +339,31 @@ const createChart = async () => {
                 scales: {
                     x: {
                         grid: {
-                            color: borderColor,
+                            color: colors.border,
                             display: true,
                         },
                         ticks: {
-                            color: mutedForegroundColor,
+                            color: colors.mutedForeground,
                             maxTicksLimit: 6,
                             font: {
                                 size: 11,
+                                weight: 'normal',
                             },
+                        },
+                        border: {
+                            display: false,
                         },
                     },
                     y: {
                         grid: {
-                            color: borderColor,
+                            color: colors.border,
                             display: true,
                         },
                         ticks: {
-                            color: mutedForegroundColor,
+                            color: colors.mutedForeground,
                             font: {
                                 size: 11,
+                                weight: 'normal',
                             },
                             callback: function (tickValue: string | number) {
                                 const value =
@@ -367,6 +372,9 @@ const createChart = async () => {
                                         : tickValue;
                                 return Math.round(value) + '°C';
                             },
+                        },
+                        border: {
+                            display: false,
                         },
                     },
                 },
