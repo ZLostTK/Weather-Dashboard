@@ -360,7 +360,8 @@ const createChart = async () => {
                             font: {
                                 size: 11,
                             },
-                            callback: function (value: number) {
+                            callback: function (tickValue: string | number) {
+                                const value = typeof tickValue === 'string' ? parseFloat(tickValue) : tickValue;
                                 return Math.round(value) + '°C';
                             },
                         },

@@ -419,7 +419,7 @@ const formatHour = (timeString: string) => {
     return date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
 };
 
-const getHourlyPreview = (hours: Array<{ time: string; temp_c: number; condition: { icon: string; text: string } }>) => {
+const getHourlyPreview = (hours: Array<{ time: string; time_epoch: number; temp_c: number; condition: { icon: string; text: string } }>) => {
     // Show every 3rd hour for a cleaner preview
     return hours.filter((_, index) => index % 3 === 0).slice(0, 8);
 };
