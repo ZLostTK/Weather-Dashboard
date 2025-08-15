@@ -85,11 +85,13 @@
     </div>
 
     <!-- Add Alert Modal -->
-    <div
-      v-if="showAddAlert"
-      class="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-      @click.self="showAddAlert = false"
-    >
+    <Teleport to="body">
+      <div
+        v-if="showAddAlert"
+        class="modal-overlay fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-[9999] p-4"
+        @click.self="showAddAlert = false"
+        style="z-index: 9999"
+      >
       <div class="bg-card backdrop-blur-md rounded-xl p-4 sm:p-6 w-full max-w-md mx-auto border border-border shadow-lg max-h-[90vh] overflow-y-auto">
         <div class="flex items-center justify-between mb-4 sm:mb-6">
           <h4 class="text-lg sm:text-xl font-semibold text-card-foreground">Crear Alerta del Clima</h4>
@@ -181,7 +183,8 @@
           </div>
         </form>
       </div>
-    </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 

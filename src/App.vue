@@ -110,11 +110,13 @@
       </main>
 
       <!-- Settings Modal -->
-      <div
-        v-if="showSettings"
-        class="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50"
-        @click.self="showSettings = false"
-      >
+      <Teleport to="body">
+        <div
+          v-if="showSettings"
+          class="settings-modal-overlay fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-[9998] p-4"
+          @click.self="showSettings = false"
+          style="z-index: 9998"
+        >
         <div class="bg-card backdrop-blur-md rounded-xl p-6 w-full max-w-md mx-4 border border-border shadow-lg">
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-lg font-semibold text-card-foreground">Settings</h3>
@@ -169,7 +171,8 @@
             </div>
           </div>
         </div>
-      </div>
+        </div>
+      </Teleport>
     </div>
   </div>
 </template>

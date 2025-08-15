@@ -199,6 +199,15 @@
   background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
 }
 
+/* Modal and overlay z-index hierarchy */
+.modal-overlay {
+  z-index: 9999 !important;
+}
+
+.settings-modal-overlay {
+  z-index: 9998 !important;
+}
+
 /* Enhanced button styles - Accesibles */
 .btn-primary {
   @apply bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
