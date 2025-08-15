@@ -155,15 +155,68 @@ const stats = computed(() => {
     };
 });
 
-const createMainChart = () => {
+const createMainChart = async () => {
     if (!mainChartRef.value || !props.forecast) return;
 
-    if (mainChart.value) {
-        mainChart.value.destroy();
+    // Wait for DOM to be fully ready
+    await nextTick();
+
+    // Check if canvas is still available and connected to DOM
+    if (!mainChartRef.value || !mainChartRef.value.isConnected) {
+        console.warn('❌ WeatherCharts: Canvas not available or not in DOM');
+        return;
     }
 
-    const ctx = mainChartRef.value.getContext('2d');
-    if (!ctx) return;
+    // Additional validation: check if canvas has proper dimensions
+    const canvasRect = mainChartRef.value.getBoundingClientRect();
+    if (canvasRect.width === 0 || canvasRect.height === 0) {
+        console.warn('❌ WeatherCharts: Canvas has zero dimensions, waiting...');
+        setTimeout(() => createMainChart(), 100);
+        return;
+    }
+
+    // Destroy existing chart with better error handling
+    if (mainChart.value) {
+        try {
+            mainChart.value.destroy();
+        } catch (error) {
+            console.warn('WeatherCharts: Error destroying existing chart:', error);
+        } finally {
+            mainChart.value = null;
+        }
+    }
+
+    // Clear any lingering Chart.js instances
+    try {
+        const existingChart = ChartJS.getChart(mainChartRef.value);
+        if (existingChart) {
+            existingChart.destroy();
+        }
+    } catch (error) {
+        console.warn('WeatherCharts: Error destroying lingering chart:', error);
+    }
+
+    // Get context with validation
+    let ctx;
+    try {
+        ctx = mainChartRef.value.getContext('2d');
+        if (!ctx) {
+            console.error('❌ WeatherCharts: Could not get 2D context');
+            return;
+        }
+        
+        // Verify context is working by testing save/restore
+        try {
+            ctx.save();
+            ctx.restore();
+        } catch (contextError) {
+            console.error('❌ WeatherCharts: Canvas context is not functioning properly:', contextError);
+            return;
+        }
+    } catch (error) {
+        console.error('❌ WeatherCharts: Error getting canvas context:', error);
+        return;
+    }
 
     const days = props.forecast.forecast.forecastday;
     const labels = days.map(day =>
@@ -310,10 +363,17 @@ const createMainChart = () => {
         };
     }
 
-    mainChart.value = new ChartJS(ctx, {
-        type:
-            activeChart.value === 'precipitation' || activeChart.value === 'wind' ? 'bar' : 'line',
-        data: { labels, datasets },
+    try {
+        // Final validation before creating chart
+        if (!ctx || !mainChartRef.value || !mainChartRef.value.isConnected) {
+            console.error('❌ WeatherCharts: Context or canvas invalid at chart creation time');
+            return;
+        }
+
+        mainChart.value = new ChartJS(ctx, {
+            type:
+                activeChart.value === 'precipitation' || activeChart.value === 'wind' ? 'bar' : 'line',
+            data: { labels, datasets },
         options: {
             responsive: true,
             maintainAspectRatio: false,
@@ -330,19 +390,51 @@ const createMainChart = () => {
                 },
             },
             scales,
-        },
-    });
+        });
+        
+        console.log('✅ WeatherCharts: Main chart created successfully');
+    } catch (error) {
+        console.error('❌ WeatherCharts: Error creating main chart:', error);
+    }
 };
 
-const createHumidityChart = () => {
+const createHumidityChart = async () => {
     if (!humidityChartRef.value || !props.forecast) return;
 
-    if (humidityChart.value) {
-        humidityChart.value.destroy();
+    await nextTick();
+
+    if (!humidityChartRef.value || !humidityChartRef.value.isConnected) {
+        console.warn('❌ WeatherCharts: Humidity canvas not available');
+        return;
     }
 
-    const ctx = humidityChartRef.value.getContext('2d');
-    if (!ctx) return;
+    // Destroy existing chart with better error handling
+    if (humidityChart.value) {
+        try {
+            humidityChart.value.destroy();
+        } catch (error) {
+            console.warn('WeatherCharts: Error destroying humidity chart:', error);
+        } finally {
+            humidityChart.value = null;
+        }
+    }
+
+    // Get context with validation
+    let ctx;
+    try {
+        ctx = humidityChartRef.value.getContext('2d');
+        if (!ctx) {
+            console.error('❌ WeatherCharts: Could not get humidity chart context');
+            return;
+        }
+        
+        // Test context functionality
+        ctx.save();
+        ctx.restore();
+    } catch (error) {
+        console.error('❌ WeatherCharts: Humidity chart context error:', error);
+        return;
+    }
 
     const days = props.forecast.forecast.forecastday.slice(0, 5);
     const labels = days.map(day =>
@@ -397,15 +489,43 @@ const createHumidityChart = () => {
     });
 };
 
-const createWindChart = () => {
+const createWindChart = async () => {
     if (!windChartRef.value || !props.forecast) return;
 
-    if (windChart.value) {
-        windChart.value.destroy();
+    await nextTick();
+
+    if (!windChartRef.value || !windChartRef.value.isConnected) {
+        console.warn('❌ WeatherCharts: Wind canvas not available');
+        return;
     }
 
-    const ctx = windChartRef.value.getContext('2d');
-    if (!ctx) return;
+    // Destroy existing chart with better error handling
+    if (windChart.value) {
+        try {
+            windChart.value.destroy();
+        } catch (error) {
+            console.warn('WeatherCharts: Error destroying wind chart:', error);
+        } finally {
+            windChart.value = null;
+        }
+    }
+
+    // Get context with validation
+    let ctx;
+    try {
+        ctx = windChartRef.value.getContext('2d');
+        if (!ctx) {
+            console.error('❌ WeatherCharts: Could not get wind chart context');
+            return;
+        }
+        
+        // Test context functionality
+        ctx.save();
+        ctx.restore();
+    } catch (error) {
+        console.error('❌ WeatherCharts: Wind chart context error:', error);
+        return;
+    }
 
     // Note: Wind pattern analysis could use forecast data in future
 
