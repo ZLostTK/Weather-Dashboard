@@ -29,7 +29,7 @@ export function useWeather() {
                 savedLocations.value = data.savedLocations || [];
                 currentLocation.value = data.currentLocation || 'London, UK';
                 apiKey.value = data.apiKey || '';
-
+                
                 if (apiKey.value) {
                     weatherService.setApiKey(apiKey.value);
                 }
@@ -47,7 +47,7 @@ export function useWeather() {
             currentLocation: currentLocation.value,
             apiKey: apiKey.value,
         };
-
+        
         try {
             localStorage.setItem('weather-dashboard', JSON.stringify(data));
         } catch (error) {
@@ -148,13 +148,7 @@ export function useWeather() {
         }
     };
 
-    const addSavedLocation = (location: {
-        name: string;
-        region?: string;
-        country?: string;
-        lat?: number;
-        lon?: number;
-    }) => {
+    const addSavedLocation = (location: { name: string; region?: string; country?: string; lat?: number; lon?: number }) => {
         const newLocation: SavedLocation = {
             id: Date.now().toString(),
             name: location.name,
@@ -168,6 +162,8 @@ export function useWeather() {
         savedLocations.value = savedLocations.value.filter(loc => loc.id !== id);
         saveData();
     };
+
+
 
     const toggleFavorite = (id: string) => {
         const location = savedLocations.value.find(loc => loc.id === id);
@@ -186,9 +182,7 @@ export function useWeather() {
             const data = JSON.parse(saved);
             console.log('Current localStorage state:', {
                 savedLocations: data.savedLocations?.length || 0,
-                favorites:
-                    data.savedLocations?.filter((loc: { isFavorite: boolean }) => loc.isFavorite)
-                        ?.length || 0,
+                favorites: data.savedLocations?.filter((loc: { isFavorite: boolean }) => loc.isFavorite)?.length || 0
             });
         }
     };
