@@ -360,7 +360,7 @@ const createChart = async () => {
                             font: {
                                 size: 11,
                             },
-                            callback: function (value: any) {
+                            callback: function (value: number) {
                                 return Math.round(value) + '°C';
                             },
                         },
@@ -414,12 +414,7 @@ watch(
     }
 );
 
-// Context validation function
-const isContextValid = () => {
-    return chartRef.value && 
-           chartRef.value.isConnected && 
-           chartRef.value.getContext('2d') !== null;
-};
+
 
 // Cleanup on unmount
 onUnmounted(() => {

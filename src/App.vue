@@ -360,7 +360,7 @@ const searchLocations = () => {
     }, 500); // 500ms delay
 };
 
-const selectSearchResult = (result: any) => {
+const selectSearchResult = (result: { name: string; region: string }) => {
     currentLocation.value = `${result.name}, ${result.region}`;
     showLocationSearch.value = false;
     searchQuery.value = '';
@@ -374,13 +374,13 @@ const selectFirstResult = () => {
     }
 };
 
-const selectSavedLocation = (location: any) => {
+const selectSavedLocation = (location: { name: string; region: string }) => {
     currentLocation.value = `${location.name}, ${location.region}`;
     showLocationSearch.value = false;
     refreshWeather();
 };
 
-const addToSavedLocations = (result: any) => {
+const addToSavedLocations = (result: { name: string; region: string; country: string; lat: number; lon: number }) => {
     const newLocation = {
         name: result.name,
         region: result.region,
@@ -392,15 +392,13 @@ const addToSavedLocations = (result: any) => {
     addSavedLocation(newLocation);
 };
 
-const handleLocationChange = () => {
-  refreshWeather();
-};
+
 
 const refreshWeather = async () => {
     await Promise.all([fetchCurrentWeather(), fetchForecast()]);
 };
 
-const selectLocation = (location: any) => {
+const selectLocation = (location: { name: string; region: string }) => {
   currentLocation.value = `${location.name}, ${location.region}`;
   refreshWeather();
 };
