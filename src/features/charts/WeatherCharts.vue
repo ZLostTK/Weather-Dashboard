@@ -400,7 +400,7 @@ const createWindChart = () => {
   const ctx = windChartRef.value.getContext('2d');
   if (!ctx) return;
 
-  const days = props.forecast.forecast.forecastday.slice(0, 5);
+  // Note: Wind pattern analysis could use forecast data in future
 
   windChart.value = new ChartJS(ctx, {
     type: 'doughnut',

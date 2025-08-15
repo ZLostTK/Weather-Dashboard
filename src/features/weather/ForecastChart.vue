@@ -332,7 +332,7 @@ onMounted(() => {
 });
 
 // Debounced chart creation to prevent multiple rapid calls
-let chartTimeout: NodeJS.Timeout | null = null;
+let chartTimeout: ReturnType<typeof setTimeout> | null = null;
 
 const debouncedCreateChart = () => {
   if (chartTimeout) {

@@ -5,6 +5,13 @@ module.exports = {
     browser: true,
     es2022: true,
   },
+  ignorePatterns: [
+    'dist/',
+    'node_modules/',
+    '*.config.js',
+    '*.config.ts',
+    'coverage/',
+  ],
   extends: [
     'eslint:recommended',
     'plugin:vue/vue3-essential',

@@ -77,7 +77,7 @@
     <div class="mt-4 flex items-center justify-center space-x-6 text-sm text-white/60">
       <div class="flex items-center space-x-2">
         <div class="w-4 h-4 bg-blue-400 rounded"></div>
-        <span>Cold (< 10°C)</span>
+        <span>Cold (&lt; 10°C)</span>
       </div>
       <div class="flex items-center space-x-2">
         <div class="w-4 h-4 bg-yellow-400 rounded"></div>
