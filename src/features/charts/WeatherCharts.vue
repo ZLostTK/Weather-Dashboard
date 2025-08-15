@@ -374,22 +374,26 @@ const createMainChart = async () => {
             type:
                 activeChart.value === 'precipitation' || activeChart.value === 'wind' ? 'bar' : 'line',
             data: { labels, datasets },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    labels: { color: 'rgba(255, 255, 255, 0.8)' },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: {
+                    duration: 0, // Disable animations to prevent context issues
                 },
-                tooltip: {
-                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                    titleColor: 'white',
-                    bodyColor: 'white',
-                    borderColor: 'rgba(255, 255, 255, 0.2)',
-                    borderWidth: 1,
+                plugins: {
+                    legend: {
+                        labels: { color: 'rgba(255, 255, 255, 0.8)' },
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleColor: 'white',
+                        bodyColor: 'white',
+                        borderColor: 'rgba(255, 255, 255, 0.2)',
+                        borderWidth: 1,
+                    },
                 },
+                scales,
             },
-            scales,
         });
         
         console.log('✅ WeatherCharts: Main chart created successfully');
@@ -467,6 +471,9 @@ const createHumidityChart = async () => {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            animation: {
+                duration: 0, // Disable animations to prevent context issues
+            },
             plugins: {
                 legend: {
                     display: false,
@@ -553,6 +560,9 @@ const createWindChart = async () => {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            animation: {
+                duration: 0, // Disable animations to prevent context issues
+            },
             plugins: {
                 legend: {
                     display: false,

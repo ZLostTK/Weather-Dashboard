@@ -307,6 +307,9 @@ const createChart = async () => {
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                animation: {
+                    duration: 0, // Disable animations to prevent context issues
+                },
                 plugins: {
                     legend: {
                         display: true,
@@ -410,6 +413,13 @@ watch(
         }
     }
 );
+
+// Context validation function
+const isContextValid = () => {
+    return chartRef.value && 
+           chartRef.value.isConnected && 
+           chartRef.value.getContext('2d') !== null;
+};
 
 // Cleanup on unmount
 onUnmounted(() => {
