@@ -45,7 +45,7 @@ Un dashboard meteorológico moderno, interactivo y completo construido con Vue 3
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/tu-usuario/weather-dashboard.git
+git clone https://github.com/ZLostTK/weather-dashboard.git
 
 # Navegar al directorio
 cd weather-dashboard
@@ -299,12 +299,12 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo [LICENSE](LICENSE) para
 
 - 🐛 **Issues**: [GitHub Issues](https://github.com/tu-usuario/weather-dashboard/issues)
 - 💬 **Discusiones**: [GitHub Discussions](https://github.com/tu-usuario/weather-dashboard/discussions)
-- 📧 **Email**: tu-email@ejemplo.com
+- 📧 **Email**: anxerdev@gmail.com
 
 ---
 
 <div align="center">
-  <p>Hecho con ❤️ y ☕ por el equipo de desarrollo</p>
+  <p>Hecho con ❤️ y ☕ por Alexander Martínez González</p>
   <p>
     <a href="#-weather-dashboard">Volver arriba</a>
   </p>
